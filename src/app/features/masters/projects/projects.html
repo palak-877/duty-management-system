@@ -1,0 +1,133 @@
+<div class="projects-container">
+
+    <div class="page-header">
+
+        <div>
+            <h2>Projects</h2>
+            <p>Manage all government projects from one place.</p>
+        </div>
+
+        <button class="add-btn" (click)="openModal()">
+            + Add Project
+        </button>
+
+    </div>
+
+    <div class="search-box">
+
+        <input
+            type="text"
+        placeholder="Search Project..."
+        [(ngModel)]="searchText"
+        >
+
+    </div>
+
+    <table>
+
+        <thead>
+
+            <tr>
+
+                <th>Project Name</th>
+                <th>Type</th>
+                <th>Department</th>
+                <th>Start Date</th>
+                <th>Actions</th>
+
+            </tr>
+
+        </thead>
+
+        <tbody>
+
+            <tr *ngFor="let project of filteredProjects">
+
+                <td>{{ project.name }}</td>
+                <td>{{ project.type }}</td>
+                <td>{{ project.department }}</td>
+                <td>{{ project.startDate }}</td>
+                <td>
+
+                    <button
+                        class="edit-btn"
+                        (click)="editProject(project)">
+                        ✏ Edit
+                    </button>
+
+                    <button
+                        class="delete-btn"
+                        (click)="deleteProject(project.id)">
+                        🗑 Delete
+                    </button>
+
+                </td>
+
+            </tr>
+
+        </tbody>
+
+    </table>
+    <div class="modal-backdrop" *ngIf="showModal">
+
+    <div class="modal">
+
+        <h2>{{ isEditMode ? 'Edit Project' : 'Add New Project' }}</h2>
+
+        <label>Project Name</label>
+
+<input
+    type="text"
+    placeholder="Enter Project Name"
+    [(ngModel)]="projectName"
+>
+
+<label>Project Type</label>
+
+<select [(ngModel)]="projectType">
+
+    <option>Census</option>
+    <option>Survey</option>
+    <option>Election</option>
+    <option>Other</option>
+
+</select>
+
+<label>Department</label>
+
+<select [(ngModel)]="department">
+
+    <option>Revenue</option>
+    <option>Health</option>
+    <option>Education</option>
+
+</select>
+
+<label>Start Date</label>
+
+<input
+    type="date"
+    [(ngModel)]="startDate"
+>
+        <div class="buttons">
+
+            <button class="cancel-btn"
+                    (click)="closeModal()">
+                Cancel
+            </button>
+
+            <button
+                class="save-btn"
+                (click)="saveProject()">
+
+                {{ isEditMode ? 'Update' : 'Save' }}
+
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+</div>

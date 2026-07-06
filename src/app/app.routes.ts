@@ -1,36 +1,67 @@
 import { Routes } from '@angular/router';
 
+import { Login } from './features/auth/login/login';
+import { Dashboard } from './features/dashboard/dashboard';
+import { Masters } from './features/masters/masters';
+import { Employees } from './features/masters/employees/employees';
+import { AssignDuty } from './features/transactions/assign-duty/assign-duty';
+import { Reports } from './features/reports/reports';
+import { MainLayout } from './core/layout/main-layout/main-layout';
+import { Projects } from './features/masters/projects/projects';
+import { Designations } from './features/masters/designations/designations';
 export const routes: Routes = [
 
   {
     path: '',
-    loadComponent: () =>
-      import('./features/auth/login/login').then(m => m.Login)
+    redirectTo: 'login',
+    pathMatch: 'full'
   },
 
   {
-    path: 'dashboard',
-    loadComponent: () =>
-      import('./features/dashboard/dashboard').then(m => m.Dashboard)
+    path: 'login',
+    component: Login
   },
 
   {
-    path: 'masters',
-    loadComponent: () =>
-      import('./features/masters/masters').then(m => m.Masters)
+    path: 'projects',
+    component: Projects
   },
 
   {
-    path: 'employees',
-    loadComponent: () =>
-      import('./features/masters/employees/employees').then(m => m.Employees)
+  path: 'designations',
+  component: Designations
+},
+
+  {
+    path: '',
+    component: MainLayout,
+    children: [
+      {
+        path: 'dashboard',
+        component: Dashboard
+      },
+      {
+        path: 'masters',
+        component: Masters
+      },
+      {
+        path: 'employees',
+        component: Employees
+      },
+      {
+        path: 'transactions',
+        component: AssignDuty
+      },
+      {
+        path: 'reports',
+        component: Reports
+      }
+    ]
   },
 
   {
-    path: 'assign-duty',
-    loadComponent: () =>
-      import('./features/transactions/assign-duty/assign-duty')
-        .then(m => m.AssignDuty)
+    path: '**',
+    redirectTo: 'login'
   }
 
 ];
