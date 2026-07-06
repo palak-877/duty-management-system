@@ -1,0 +1,25 @@
+.sidebar {
+  width: 220px;
+  height: 100vh;
+  background: #1f2937;
+  color: white;
+  padding-top: 20px;
+  display: flex;
+  flex-direction: column;
+}
+
+.menu-item {
+  padding: 15px 20px;
+  cursor: pointer;
+  color: white;
+  text-decoration: none;
+}
+
+.menu-item:hover {
+  background: #374151;
+}
+
+.logout {
+  margin-top: auto;
+  color: #ff4d4d;
+}

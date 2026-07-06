@@ -1,0 +1,31 @@
+.assign-duty {
+  padding: 20px;
+}
+
+.filters {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 15px;
+}
+
+select {
+  padding: 6px;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th, td {
+  border: 1px solid #ddd;
+  padding: 10px;
+}
+
+.assign-btn {
+  margin-top: 15px;
+  padding: 10px;
+  background: green;
+  color: white;
+  border: none;
+}
