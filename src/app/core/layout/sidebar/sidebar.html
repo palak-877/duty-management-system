@@ -1,27 +1,97 @@
 <nav class="sidebar">
 
-  <a routerLink="/dashboard" class="menu-item">
-    Dashboard
-  </a>
+    <!-- Dashboard -->
 
-  <a routerLink="/masters" class="menu-item">
-    Masters
-  </a>
+    <a
+        routerLink="/dashboard"
+        routerLinkActive="active"
+        class="menu-item">
+        Dashboard
+    </a>
 
-  <a routerLink="/employees" class="menu-item">
-    Employees
-  </a>
+    <!-- Masters -->
 
-  <a routerLink="/assign-duty" class="menu-item">
-    Transactions
-  </a>
+    <div class="menu-heading" (click)="toggleMasters()">
 
-  <a routerLink="/reports" class="menu-item">
-    Reports
-  </a>
+        {{ showMasters ? '▼' : '▶' }} Masters
 
-  <div class="menu-item logout">
-    Logout
-  </div>
+    </div>
+
+    <div *ngIf="showMasters">
+
+        <a
+            routerLink="/projects"
+            routerLinkActive="active"
+            class="submenu-item">
+            Projects
+        </a>
+
+        <a
+            routerLink="/designations"
+            routerLinkActive="active"
+            class="submenu-item">
+            Designations
+        </a>
+
+        <a
+            routerLink="/employees"
+            routerLinkActive="active"
+            class="submenu-item">
+            Employees
+        </a>
+
+    </div>
+
+    <!-- Transactions -->
+
+    <div class="menu-heading" (click)="toggleTransactions()">
+
+        {{ showTransactions ? '▼' : '▶' }} Transactions
+
+    </div>
+
+    <div *ngIf="showTransactions">
+
+        <a
+            routerLink="/assign-duty"
+            routerLinkActive="active"
+            class="submenu-item">
+            Assign Duty
+        </a>
+
+    </div>
+
+    <!-- Reports -->
+
+    <div class="menu-heading" (click)="toggleReports()">
+
+        {{ showReports ? '▼' : '▶' }} Reports
+
+    </div>
+
+    <div *ngIf="showReports">
+
+        <a
+            routerLink="/reports"
+            routerLinkActive="active"
+            class="submenu-item">
+            Project Report
+        </a>
+
+        <a
+            routerLink="/reports"
+            routerLinkActive="active"
+            class="submenu-item">
+            Employee Report
+        </a>
+
+        <a
+            routerLink="/reports"
+            routerLinkActive="active"
+            class="submenu-item">
+            Designation Report
+        </a>
+
+    </div>
 
 </nav>

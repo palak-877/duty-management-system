@@ -29,27 +29,83 @@
     <table>
 
         <thead>
-
-            <tr>
-
-                <th>Role</th>
-                <th>Description</th>
-
-            </tr>
-
-        </thead>
+    <tr>
+        <th>Role</th>
+        <th>Description</th>
+        <th>Actions</th>
+    </tr>
+</thead>
 
         <tbody>
 
-            <tr *ngFor="let designation of designations">
+            <tr *ngFor="let designation of filteredDesignations()">
 
-                <td>{{ designation.role }}</td>
-                <td>{{ designation.description }}</td>
+    <td>{{ designation.role }}</td>
+    <td>{{ designation.description }}</td>
 
-            </tr>
+    <td>
 
-        </tbody>
+        <button
+            class="edit-btn"
+            (click)="editDesignation(designation)">
+            Edit
+        </button>
+
+        <button
+            class="delete-btn"
+            (click)="deleteDesignation(designation.id)">
+            Delete
+        </button>
+
+    </td>
+
+</tr>
 
     </table>
+    <div class="modal-backdrop" *ngIf="showModal">
+
+    <div class="modal">
+
+        <h2>{{ isEditMode ? 'Edit Role' : 'Add New Role' }}</h2>
+
+        <label>Role</label>
+
+        <input
+            type="text"
+            placeholder="Enter Role"
+            [(ngModel)]="role"
+        >
+
+        <label>Description</label>
+
+        <input
+            type="text"
+            placeholder="Enter Description"
+            [(ngModel)]="description"
+        >
+
+        <div class="buttons">
+
+            <button
+                class="cancel-btn"
+                (click)="closeModal()">
+
+                Cancel
+
+            </button>
+
+            <button
+    class="save-btn"
+    (click)="saveDesignation()">
+
+    {{ isEditMode ? 'Update' : 'Save' }}
+
+</button>
+
+        </div>
+
+    </div>
+
+</div>
 
 </div>

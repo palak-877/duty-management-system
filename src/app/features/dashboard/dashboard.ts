@@ -1,36 +1,38 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Router } from '@angular/router';
-import { dutyData } from '../../core/services/duty-data';
-import { RouterLink } from '@angular/router';
+
+import { projectData } from '../../core/services/project-data';
+import { designationData } from '../../core/services/designation-data';
+import { employeeData } from '../../core/services/employee-data';
+
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [CommonModule,RouterLink],
+  imports: [CommonModule],
   templateUrl: './dashboard.html',
   styleUrl: './dashboard.css'
 })
-export class Dashboard implements OnInit {
+export class Dashboard {
 
-  employees = dutyData.employees;
+  projects = projectData.projects;
 
-  constructor(private router: Router) {}
+  designations = designationData.designations;
 
-  ngOnInit() {
-    this.router.events.subscribe(() => {
-      this.employees = dutyData.employees;
-    });
+  employees = employeeData.employees;
+
+  // This will be connected later when we build Assign Duty
+  totalAssignments = 0;
+
+  get totalProjects() {
+    return this.projects.length;
+  }
+
+  get totalDesignations() {
+    return this.designations.length;
   }
 
   get totalEmployees() {
     return this.employees.length;
   }
 
-  get assigned() {
-    return this.employees.filter(e => e.status === 'Assigned').length;
-  }
-
-  get unassigned() {
-    return this.employees.filter(e => e.status === 'Unassigned').length;
-  }
 }

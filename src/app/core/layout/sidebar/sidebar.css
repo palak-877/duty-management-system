@@ -1,25 +1,105 @@
 .sidebar {
-  width: 220px;
-  height: 100vh;
-  background: #1f2937;
-  color: white;
-  padding-top: 20px;
-  display: flex;
-  flex-direction: column;
+    width: 240px;
+    height: 100vh;
+    background: #1f2937;
+    color: white;
+    display: flex;
+    flex-direction: column;
+    padding: 20px 0;
 }
 
+
+/* Dashboard */
+
 .menu-item {
-  padding: 15px 20px;
-  cursor: pointer;
-  color: white;
-  text-decoration: none;
+
+    display: block;
+    padding: 14px 20px;
+    color: white;
+    text-decoration: none;
+    font-weight: 500;
+    transition: 0.3s;
+
 }
 
 .menu-item:hover {
-  background: #374151;
+
+    background: #374151;
+
 }
 
-.logout {
-  margin-top: auto;
-  color: #ff4d4d;
+
+/* Masters / Transactions / Reports */
+
+.menu-heading {
+
+    margin-top: 15px;
+    padding: 12px 20px;
+
+    font-size: 14px;
+    font-weight: bold;
+
+    text-transform: uppercase;
+    letter-spacing: 1px;
+
+    color: #9ca3af;
+
+    cursor: pointer;
+
+    transition: 0.3s;
+
+}
+
+
+.menu-heading:hover {
+
+    background: #374151;
+    color: white;
+
+}
+
+
+/* Sub Menu */
+
+.submenu-item {
+
+    display: block;
+
+    padding: 12px 20px 12px 45px;
+
+    color: white;
+
+    text-decoration: none;
+
+    transition: 0.3s;
+
+    font-size: 14px;
+
+}
+
+
+.submenu-item:hover {
+
+    background: #374151;
+
+}
+
+
+/* Active Page */
+
+.active {
+
+    background: #2563eb;
+
+    border-left: 4px solid #60a5fa;
+
+}
+
+
+/* Smooth spacing */
+
+.sidebar a {
+
+    cursor: pointer;
+
 }

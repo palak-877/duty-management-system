@@ -32,3 +32,6 @@
 .logout:hover {
   background: darkred;
 }
+a {
+    text-decoration: none;
+}
