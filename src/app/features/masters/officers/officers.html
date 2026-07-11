@@ -1,0 +1,191 @@
+<div class="officers">
+
+  <div class="page-header">
+    <h2>Officers Management</h2>
+
+    <button (click)="openModal()">
+      + Create Officer
+    </button>
+  </div>
+
+  <input
+    class="search-box"
+    type="text"
+    placeholder="Search by name, project, role, constituency or User ID..."
+    [(ngModel)]="searchText">
+
+  <table>
+
+    <tr>
+      <th>Name</th>
+      <th>Project</th>
+      <th>Officer Role</th>
+      <th>Constituency</th>
+      <th>User ID</th>
+      <th>Actions</th>
+    </tr>
+
+    <tr *ngFor="let officer of filteredOfficers()">
+
+      <td>{{ officer.name }}</td>
+      <td>{{ officer.project }}</td>
+      <td>{{ officer.officerRole }}</td>
+      <td>{{ officer.constituency }}</td>
+      <td>{{ officer.userId }}</td>
+
+      <td>
+
+        <button
+          class="view-btn"
+          (click)="viewOfficer(officer)">
+          View
+        </button>
+
+        <button
+          class="edit-btn"
+          (click)="editOfficer(officer)">
+          Edit
+        </button>
+
+        <button
+          class="delete-btn"
+          (click)="deleteOfficer(officer.id)">
+          Delete
+        </button>
+
+      </td>
+
+    </tr>
+
+    <tr *ngIf="filteredOfficers().length === 0">
+
+      <td colspan="6" style="text-align:center; padding:20px;">
+        No officers found.
+      </td>
+
+    </tr>
+
+  </table>
+
+  <!-- Create / Edit Modal -->
+
+  <div class="modal" *ngIf="showModal">
+
+    <div class="modal-content">
+
+      <h2>
+        {{ isEditMode ? 'Edit Officer' : 'Create Officer' }}
+      </h2>
+
+      <label>Officer Name</label>
+
+      <input
+        type="text"
+        [(ngModel)]="officerName">
+
+      <label>Project</label>
+
+      <select [(ngModel)]="selectedProject">
+
+        <option value="">Select Project</option>
+
+        <option
+          *ngFor="let project of projects"
+          [value]="project.name">
+
+          {{ project.name }}
+
+        </option>
+
+      </select>
+
+      <label>Officer Role</label>
+
+      <select [(ngModel)]="selectedOfficerRole">
+
+        <option value="">Select Officer Role</option>
+
+        <option
+          *ngFor="let role of officerRoles"
+          [value]="role">
+
+          {{ role }}
+
+        </option>
+
+      </select>
+
+      <label>Assembly Constituency</label>
+
+      <input
+        type="text"
+        [(ngModel)]="constituency">
+
+      <label>Address</label>
+
+      <textarea
+        rows="3"
+        [(ngModel)]="address">
+      </textarea>
+
+      <div class="buttons">
+
+        <button
+          class="cancel-btn"
+          (click)="closeModal()">
+
+          Cancel
+
+        </button>
+
+        <button
+          class="save-btn"
+          (click)="saveOfficer()">
+
+          {{ isEditMode ? 'Update' : 'Save' }}
+
+        </button>
+
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- View Officer Modal -->
+
+  <div class="modal" *ngIf="showViewModal">
+
+    <div class="modal-content">
+
+      <h2>Officer Details</h2>
+
+      <p><strong>Name:</strong> {{ selectedOfficer?.name }}</p>
+
+      <p><strong>Project:</strong> {{ selectedOfficer?.project }}</p>
+
+      <p><strong>Officer Role:</strong> {{ selectedOfficer?.officerRole }}</p>
+
+      <p><strong>Assembly Constituency:</strong> {{ selectedOfficer?.constituency }}</p>
+
+      <p><strong>Address:</strong> {{ selectedOfficer?.address }}</p>
+
+      <p><strong>User ID:</strong> {{ selectedOfficer?.userId }}</p>
+
+      <div class="buttons">
+
+        <button
+          class="cancel-btn"
+          (click)="closeViewModal()">
+
+          Close
+
+        </button>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</div>

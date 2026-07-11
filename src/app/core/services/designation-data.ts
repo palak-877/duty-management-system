@@ -1,25 +1,28 @@
-export interface Designation {
-  id: number;
-  role: string;
-  description: string;
-}
-
 export const designationData = {
+
   designations: [
+
     {
       id: 1,
-      role: 'Enumerator',
-      description: 'Collects survey and census data.'
+      project: 'Election',
+      role: 'Supervisor',
+      description: 'Supervises polling staff'
     },
+
     {
       id: 2,
-      role: 'Supervisor',
-      description: 'Supervises field staff.'
+      project: 'Election',
+      role: 'Enumerator',
+      description: 'Conducts polling work'
     },
+
     {
       id: 3,
-      role: 'Nodal Officer',
-      description: 'Coordinates the complete project.'
+      project: 'Population Census',
+      role: 'Field Officer',
+      description: 'Collects census data'
     }
+
   ]
+
 };

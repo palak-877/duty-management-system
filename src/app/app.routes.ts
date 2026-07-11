@@ -32,6 +32,13 @@ export const routes: Routes = [
   component: Designations
 },
 
+{
+  path: 'officers',
+  loadComponent: () =>
+    import('./features/masters/officers/officers')
+      .then(m => m.Officers)
+},
+
   {
     path: '',
     component: MainLayout,

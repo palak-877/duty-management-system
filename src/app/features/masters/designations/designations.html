@@ -30,6 +30,7 @@
 
         <thead>
     <tr>
+        <th>Project</th>
         <th>Role</th>
         <th>Description</th>
         <th>Actions</th>
@@ -39,7 +40,7 @@
         <tbody>
 
             <tr *ngFor="let designation of filteredDesignations()">
-
+    <td>{{ designation.project }}</td>
     <td>{{ designation.role }}</td>
     <td>{{ designation.description }}</td>
 
@@ -67,6 +68,24 @@
     <div class="modal">
 
         <h2>{{ isEditMode ? 'Edit Role' : 'Add New Role' }}</h2>
+
+        <label>Project</label>
+
+        <select [(ngModel)]="selectedProject">
+
+    <option value="">
+        Select Project
+    </option>
+
+    <option
+        *ngFor="let project of projects"
+        [value]="project.name">
+
+        {{ project.name }}
+
+    </option>
+
+</select>
 
         <label>Role</label>
 
