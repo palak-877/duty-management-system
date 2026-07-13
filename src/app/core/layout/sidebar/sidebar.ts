@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
+import { Auth } from '../../../core/services/auth';
 
 @Component({
   selector: 'app-sidebar',
@@ -17,6 +18,17 @@ export class Sidebar {
 
   showReports = false;
 
+  loggedInUser: any = null;
+
+  role = '';
+
+  constructor(private auth: Auth) {
+
+    this.loggedInUser = this.auth.getLoggedInUser();
+
+    this.role = this.loggedInUser?.role;
+
+  }
 
   toggleMasters() {
 
@@ -24,13 +36,11 @@ export class Sidebar {
 
   }
 
-
   toggleTransactions() {
 
     this.showTransactions = !this.showTransactions;
 
   }
-
 
   toggleReports() {
 

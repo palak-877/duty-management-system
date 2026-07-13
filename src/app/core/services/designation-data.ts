@@ -19,8 +19,29 @@ export const designationData = {
     {
       id: 3,
       project: 'Population Census',
-      role: 'Field Officer',
+      role: 'Supervisor',
+      description: 'Supervises census staff'
+    },
+
+    {
+      id: 4,
+      project: 'Population Census',
+      role: 'Enumerator',
       description: 'Collects census data'
+    },
+
+    {
+      id: 5,
+      project: 'Drug Survey',
+      role: 'Supervisor',
+      description: 'Supervises survey staff'
+    },
+
+    {
+      id: 6,
+      project: 'Drug Survey',
+      role: 'Enumerator',
+      description: 'Conducts survey'
     }
 
   ]

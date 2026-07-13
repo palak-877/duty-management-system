@@ -2,44 +2,162 @@
 
   <h2>Assign Duty</h2>
 
-  <!-- Department Filter -->
-  <div class="filters">
+  <!-- Project Selection -->
 
-    <select [(ngModel)]="selectedDepartment">
-      <option value="">All Departments</option>
-      <option value="Education">Education</option>
-      <option value="Health">Health</option>
-      <option value="Revenue">Revenue</option>
+  <div class="form-section">
+
+    <label>Select Project</label>
+
+    <select
+      [(ngModel)]="selectedProject"
+      (change)="onProjectChange()">
+
+      <option value="">
+        Select Project
+      </option>
+
+      <option
+        *ngFor="let project of projects"
+        [value]="project.name">
+
+        {{ project.name }}
+
+      </option>
+
     </select>
 
   </div>
 
-  <!-- Employee Table -->
-  <table>
+  <!-- Officer Details -->
 
-    <tr>
-      <th>Select</th>
-      <th>Name</th>
-      <th>Department</th>
-      <th>Status</th>
-    </tr>
+  <div
+    class="officer-card"
+    *ngIf="selectedOfficer">
 
-    <tr *ngFor="let emp of filteredEmployees">
+    <h3>Officer Details</h3>
 
-      <td>
-        <input type="checkbox" [(ngModel)]="emp.selected" />
-      </td>
+    <p>
 
-      <td>{{ emp.name }}</td>
-      <td>{{ emp.department }}</td>
-      <td>{{ emp.status }}</td>
+      <strong>Name:</strong>
 
-    </tr>
+      {{ selectedOfficer.name }}
 
-  </table>
+    </p>
 
-  <button class="assign-btn" (click)="assignDuty()">
-    Assign Duty
-  </button>
+    <p>
+
+      <strong>Role:</strong>
+
+      {{ selectedOfficer.officerRole }}
+
+    </p>
+
+    <p>
+
+      <strong>Constituency:</strong>
+
+      {{ selectedOfficer.constituency }}
+
+    </p>
+
+  </div>
+
+  <!-- Required Staff -->
+
+  <div
+    class="staff-section"
+    *ngIf="requiredStaff.length > 0">
+
+    <h3>Required Staff</h3>
+
+    <div
+      class="staff-row"
+      *ngFor="let staff of requiredStaff">
+
+      <label>
+
+        {{ staff.role }}
+
+      </label>
+
+      <input
+        type="number"
+        min="0"
+        [(ngModel)]="staff.count">
+
+    </div>
+
+  </div>
+
+  <!-- Buttons -->
+
+  <div
+    class="buttons"
+    *ngIf="requiredStaff.length > 0">
+
+    <button
+      class="recommend-btn"
+      (click)="recommendEmployees()">
+
+      🤖 Recommend Employees
+
+    </button>
+
+    <button
+      class="assign-btn"
+      (click)="assignDuty()">
+
+      Assign Duties
+
+    </button>
+
+  </div>
+
+  <!-- Recommended Employees -->
+
+  <div
+    class="recommendation-section"
+    *ngIf="recommendedEmployees.length > 0">
+
+    <h3>Recommended Employees</h3>
+
+    <table>
+
+      <tr>
+
+        <th>Employee Code</th>
+
+        <th>Name</th>
+
+        <th>Designation</th>
+
+        <th>Department</th>
+
+        <th>Constituency</th>
+
+        <th>Office</th>
+
+      </tr>
+
+      <tr
+        *ngFor="let emp of recommendedEmployees">
+
+        <td>{{ emp.employeeCode }}</td>
+
+        <td>{{ emp.name }}</td>
+
+        <td>{{ emp.designation }}</td>
+
+        <td>{{ emp.department }}</td>
+
+        <td>{{ emp.constituency }}</td>
+
+        <td>{{ emp.office }}</td>
+
+      </tr>
+
+    </table>
+
+  </div>
 
 </div>

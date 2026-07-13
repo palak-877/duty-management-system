@@ -9,6 +9,8 @@ import { Reports } from './features/reports/reports';
 import { MainLayout } from './core/layout/main-layout/main-layout';
 import { Projects } from './features/masters/projects/projects';
 import { Designations } from './features/masters/designations/designations';
+import { authGuard } from './core/guards/auth-guard';
+
 export const routes: Routes = [
 
   {
@@ -24,45 +26,59 @@ export const routes: Routes = [
 
   {
     path: 'projects',
-    component: Projects
+    component: Projects,
+    canActivate: [authGuard]
   },
 
   {
-  path: 'designations',
-  component: Designations
-},
+    path: 'designations',
+    component: Designations,
+    canActivate: [authGuard]
+  },
 
-{
-  path: 'officers',
-  loadComponent: () =>
-    import('./features/masters/officers/officers')
-      .then(m => m.Officers)
-},
+  {
+    path: 'officers',
+    loadComponent: () =>
+      import('./features/masters/officers/officers')
+        .then(m => m.Officers),
+    canActivate: [authGuard]
+  },
 
   {
     path: '',
     component: MainLayout,
     children: [
+
       {
         path: 'dashboard',
-        component: Dashboard
+        component: Dashboard,
+        canActivate: [authGuard]
       },
+
       {
         path: 'masters',
-        component: Masters
+        component: Masters,
+        canActivate: [authGuard]
       },
+
       {
         path: 'employees',
-        component: Employees
+        component: Employees,
+        canActivate: [authGuard]
       },
+
       {
         path: 'transactions',
-        component: AssignDuty
+        component: AssignDuty,
+        canActivate: [authGuard]
       },
+
       {
         path: 'reports',
-        component: Reports
+        component: Reports,
+        canActivate: [authGuard]
       }
+
     ]
   },
 

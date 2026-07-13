@@ -1,57 +1,79 @@
 <nav class="sidebar">
 
-    <!-- Dashboard -->
+    <!-- ================= ADMIN ONLY ================= -->
 
-    <a
-        routerLink="/dashboard"
-        routerLinkActive="active"
-        class="menu-item">
-        Dashboard
-    </a>
+    <div *ngIf="role === 'Admin'">
 
-    <!-- Masters -->
+        <!-- Dashboard -->
 
-    <div class="menu-heading" (click)="toggleMasters()">
+        <a
+            routerLink="/dashboard"
+            routerLinkActive="active"
+            class="menu-item">
 
-        {{ showMasters ? '▼' : '▶' }} Masters
+            Dashboard
+
+        </a>
+
+        <!-- Masters -->
+
+        <div
+            class="menu-heading"
+            (click)="toggleMasters()">
+
+            {{ showMasters ? '▼' : '▶' }} Masters
+
+        </div>
+
+        <div *ngIf="showMasters">
+
+            <a
+                routerLink="/officers"
+                routerLinkActive="active"
+                class="submenu-item">
+
+                Officers
+
+            </a>
+
+            <a
+                routerLink="/projects"
+                routerLinkActive="active"
+                class="submenu-item">
+
+                Projects
+
+            </a>
+
+            <a
+                routerLink="/designations"
+                routerLinkActive="active"
+                class="submenu-item">
+
+                Designations
+
+            </a>
+
+            <a
+                routerLink="/employees"
+                routerLinkActive="active"
+                class="submenu-item">
+
+                Employees
+
+            </a>
+
+        </div>
 
     </div>
 
-    <div *ngIf="showMasters">
-
-        <a
-            routerLink="/officers"
-            routerLinkActive="active"
-            class="submenu-item">
-            Officers
-        </a>
-
-        <a
-            routerLink="/projects"
-            routerLinkActive="active"
-            class="submenu-item">
-            Projects
-        </a>
-
-        <a
-            routerLink="/designations"
-            routerLinkActive="active"
-            class="submenu-item">
-            Designations
-        </a>
-
-        <a
-            routerLink="/employees"
-            routerLinkActive="active"
-            class="submenu-item">
-            Employees
-        </a>
-
-    </div>
+    <!-- ================= BOTH ADMIN & OFFICER ================= -->
 
     <!-- Transactions -->
 
-    <div class="menu-heading" (click)="toggleTransactions()">
+    <div
+        class="menu-heading"
+        (click)="toggleTransactions()">
 
         {{ showTransactions ? '▼' : '▶' }} Transactions
 
@@ -60,17 +82,21 @@
     <div *ngIf="showTransactions">
 
         <a
-            routerLink="/assign-duty"
+            routerLink="/transactions"
             routerLinkActive="active"
             class="submenu-item">
+
             Assign Duty
+
         </a>
 
     </div>
 
     <!-- Reports -->
 
-    <div class="menu-heading" (click)="toggleReports()">
+    <div
+        class="menu-heading"
+        (click)="toggleReports()">
 
         {{ showReports ? '▼' : '▶' }} Reports
 
@@ -82,21 +108,27 @@
             routerLink="/reports"
             routerLinkActive="active"
             class="submenu-item">
+
             Project Report
+
         </a>
 
         <a
             routerLink="/reports"
             routerLinkActive="active"
             class="submenu-item">
+
             Employee Report
+
         </a>
 
         <a
             routerLink="/reports"
             routerLinkActive="active"
             class="submenu-item">
+
             Designation Report
+
         </a>
 
     </div>

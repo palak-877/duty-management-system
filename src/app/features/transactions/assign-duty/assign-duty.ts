@@ -1,7 +1,11 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { dutyData } from '../../../core/services/duty-data';
+
+import { projectData } from '../../../core/services/project-data';
+import { officerData } from '../../../core/services/officer-data';
+import { designationData } from '../../../core/services/designation-data';
+import { employeeData } from '../../../core/services/employee-data';
 
 @Component({
   selector: 'app-assign-duty',
@@ -12,34 +16,111 @@ import { dutyData } from '../../../core/services/duty-data';
 })
 export class AssignDuty {
 
-  selectedDepartment: string = '';
+  projects = projectData.projects;
 
-  employees = dutyData.employees;
+  officers = officerData.officers;
 
-  get filteredEmployees() {
-    if (!this.selectedDepartment) {
-      return this.employees;
-    }
-    return this.employees.filter(
-      emp => emp.department === this.selectedDepartment
+  designations = designationData.designations;
+
+  employees = employeeData.employees;
+
+  selectedProject = '';
+
+  selectedOfficer: any = null;
+
+  requiredStaff: any[] = [];
+
+  recommendedEmployees: any[] = [];
+
+  onProjectChange() {
+
+    this.selectedOfficer = this.officers.find(
+      officer => officer.project === this.selectedProject
     );
+
+    this.requiredStaff = [];
+
+    this.recommendedEmployees = [];
+
+    const projectRoles = this.designations.filter(
+      designation => designation.project === this.selectedProject
+    );
+
+    projectRoles.forEach(role => {
+
+      this.requiredStaff.push({
+
+        role: role.role,
+
+        count: 0
+
+      });
+
+    });
+
   }
 
-  toggleSelection(emp: any) {
-    emp.selected = !emp.selected;
+  recommendEmployees() {
+
+    this.recommendedEmployees = [];
+
+    if (!this.selectedOfficer) {
+
+      alert('Please select a project.');
+
+      return;
+
+    }
+
+    this.requiredStaff.forEach(staff => {
+
+      const matchingEmployees = this.employees.filter(emp =>
+
+        emp.designation === staff.role &&
+
+        emp.constituency === this.selectedOfficer.constituency &&
+
+        !emp.isAssigned
+
+      );
+
+      const selectedEmployees = matchingEmployees.slice(
+        0,
+        Number(staff.count)
+      );
+
+      this.recommendedEmployees.push(...selectedEmployees);
+
+    });
+
+    if (this.recommendedEmployees.length === 0) {
+
+      alert('No suitable employees found.');
+
+    }
+
   }
 
   assignDuty() {
-    let selectedCount = 0;
 
-    this.employees.forEach(emp => {
-      if (emp.selected) {
-        emp.status = 'Assigned';
-        emp.selected = false;
-        selectedCount++;
-      }
+    if (this.recommendedEmployees.length === 0) {
+
+      alert('Please recommend employees first.');
+
+      return;
+
+    }
+
+    this.recommendedEmployees.forEach(emp => {
+
+      emp.isAssigned = true;
+
     });
 
-    alert(`${selectedCount} Employee(s) Assigned Successfully`);
+    alert(
+      `${this.recommendedEmployees.length} employee(s) assigned successfully.`
+    );
+
   }
+
 }
