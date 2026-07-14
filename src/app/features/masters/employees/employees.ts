@@ -53,9 +53,15 @@ filteredEmployees() {
 
   return this.employees.filter(employee =>
 
+    employee.employeeCode.toLowerCase().includes(search) ||
+
     employee.name.toLowerCase().includes(search) ||
 
     employee.department.toLowerCase().includes(search) ||
+
+    employee.designation.toLowerCase().includes(search) ||
+
+    employee.constituency.toLowerCase().includes(search) ||
 
     employee.phone.includes(search) ||
 

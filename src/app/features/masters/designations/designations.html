@@ -11,7 +11,7 @@
             class="add-btn"
             (click)="openModal()">
 
-            + Add Role
+            + Add Duty Role
 
         </button>
 
@@ -21,7 +21,7 @@
 
         <input
             type="text"
-            placeholder="Search Role..."
+            placeholder="Search Duty Role..."
             [(ngModel)]="searchText">
 
     </div>
@@ -29,102 +29,122 @@
     <table>
 
         <thead>
-    <tr>
-        <th>Project</th>
-        <th>Role</th>
-        <th>Description</th>
-        <th>Actions</th>
-    </tr>
-</thead>
+
+            <tr>
+
+                <th>Project</th>
+                <th>Duty Role</th>
+                <th>Description</th>
+                <th>Actions</th>
+
+            </tr>
+
+        </thead>
 
         <tbody>
 
             <tr *ngFor="let designation of filteredDesignations()">
-    <td>{{ designation.project }}</td>
-    <td>{{ designation.role }}</td>
-    <td>{{ designation.description }}</td>
 
-    <td>
+                <td>{{ getProjectName(designation.projectId) }}</td>
 
-        <button
-            class="edit-btn"
-            (click)="editDesignation(designation)">
-            Edit
-        </button>
+                <td>{{ designation.dutyRole }}</td>
 
-        <button
-            class="delete-btn"
-            (click)="deleteDesignation(designation.id)">
-            Delete
-        </button>
+                <td>{{ designation.description }}</td>
 
-    </td>
+                <td>
 
-</tr>
+                    <button
+                        class="edit-btn"
+                        (click)="editDesignation(designation)">
+
+                        Edit
+
+                    </button>
+
+                    <button
+                        class="delete-btn"
+                        (click)="deleteDesignation(designation.id)">
+
+                        Delete
+
+                    </button>
+
+                </td>
+
+            </tr>
+
+        </tbody>
 
     </table>
-    <div class="modal-backdrop" *ngIf="showModal">
 
-    <div class="modal">
+    <div
+        class="modal-backdrop"
+        *ngIf="showModal">
 
-        <h2>{{ isEditMode ? 'Edit Role' : 'Add New Role' }}</h2>
+        <div class="modal">
 
-        <label>Project</label>
+            <h2>
 
-        <select [(ngModel)]="selectedProject">
+                {{ isEditMode ? 'Edit Duty Role' : 'Add New Duty Role' }}
 
-    <option value="">
-        Select Project
-    </option>
+            </h2>
 
-    <option
-        *ngFor="let project of projects"
-        [value]="project.name">
+            <label>Project</label>
 
-        {{ project.name }}
+            <select [(ngModel)]="selectedProject">
 
-    </option>
+                <option value="">
 
-</select>
+                    Select Project
 
-        <label>Role</label>
+                </option>
 
-        <input
-            type="text"
-            placeholder="Enter Role"
-            [(ngModel)]="role"
-        >
+                <option
+                    *ngFor="let project of projects"
+                    [value]="project.id">
 
-        <label>Description</label>
+                    {{ project.name }}
 
-        <input
-            type="text"
-            placeholder="Enter Description"
-            [(ngModel)]="description"
-        >
+                </option>
 
-        <div class="buttons">
+            </select>
 
-            <button
-                class="cancel-btn"
-                (click)="closeModal()">
+            <label>Duty Role</label>
 
-                Cancel
+            <input
+                type="text"
+                placeholder="Enter Duty Role"
+                [(ngModel)]="dutyRole">
 
-            </button>
+            <label>Description</label>
 
-            <button
-    class="save-btn"
-    (click)="saveDesignation()">
+            <input
+                type="text"
+                placeholder="Enter Description"
+                [(ngModel)]="description">
 
-    {{ isEditMode ? 'Update' : 'Save' }}
+            <div class="buttons">
 
-</button>
+                <button
+                    class="cancel-btn"
+                    (click)="closeModal()">
+
+                    Cancel
+
+                </button>
+
+                <button
+                    class="save-btn"
+                    (click)="saveDesignation()">
+
+                    {{ isEditMode ? 'Update' : 'Save' }}
+
+                </button>
+
+            </div>
 
         </div>
 
     </div>
-
-</div>
 
 </div>

@@ -9,9 +9,13 @@ export class Auth {
   login(username: string, password: string) {
 
     const user = authData.users.find(
+
       u =>
-        u.username === username &&
-        u.password === password
+
+        u.username.toLowerCase() === username.trim().toLowerCase() &&
+
+        u.password === password.trim()
+
     );
 
     if (user) {
@@ -43,7 +47,31 @@ export class Auth {
 
   }
 
-  isLoggedIn() {
+  getLoggedInUserId(): string | null {
+
+    const user = this.getLoggedInUser();
+
+    return user ? user.username : null;
+
+  }
+
+  isAdmin(): boolean {
+
+    const user = this.getLoggedInUser();
+
+    return user?.role === 'Admin';
+
+  }
+
+  isOfficer(): boolean {
+
+    const user = this.getLoggedInUser();
+
+    return user?.role === 'Officer';
+
+  }
+
+  isLoggedIn(): boolean {
 
     return this.getLoggedInUser() !== null;
 

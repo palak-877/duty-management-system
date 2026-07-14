@@ -29,3 +29,33 @@ th, td {
   color: white;
   border: none;
 }
+
+.warning-box {
+
+    margin: 20px 0;
+
+    padding: 15px;
+
+    background: #fff3cd;
+
+    border: 1px solid #ffeeba;
+
+    border-left: 6px solid #ff9800;
+
+    border-radius: 8px;
+
+}
+
+.warning-box pre {
+
+    margin: 0;
+
+    white-space: pre-wrap;
+
+    font-family: inherit;
+
+    color: #856404;
+
+    font-size: 15px;
+
+}

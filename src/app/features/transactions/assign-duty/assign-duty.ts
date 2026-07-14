@@ -1,12 +1,14 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+
 
 import { projectData } from '../../../core/services/project-data';
 import { officerData } from '../../../core/services/officer-data';
 import { designationData } from '../../../core/services/designation-data';
 import { employeeData } from '../../../core/services/employee-data';
-
+import { dutyEligibilityData } from '../../../core/services/duty-eligibility-data';
+import { Auth } from '../../../core/services/auth';
 @Component({
   selector: 'app-assign-duty',
   standalone: true,
@@ -14,113 +16,518 @@ import { employeeData } from '../../../core/services/employee-data';
   templateUrl: './assign-duty.html',
   styleUrl: './assign-duty.css'
 })
-export class AssignDuty {
+export class AssignDuty implements OnInit {
+
+  // =======================
+  // Master Data
+  // =======================
 
   projects = projectData.projects;
-
   officers = officerData.officers;
-
-  designations = designationData.designations;
-
+  dutyRoles = designationData.designations;
   employees = employeeData.employees;
+  eligibilityRules = dutyEligibilityData;
+  // =======================
+  // Step Control
+  // =======================
 
-  selectedProject = '';
+  currentStep = 1;
+
+  // =======================
+  // Form Data
+  // =======================
+
+  selectedProject: number = 0;
 
   selectedOfficer: any = null;
+
+  assignmentMethod = 'manual';
 
   requiredStaff: any[] = [];
 
   recommendedEmployees: any[] = [];
 
+  eligibleEmployees: any[] = [];
+
+  availabilityMessages: string[] = [];
+
+  warningMessage = '';
+
+  loggedInUser: any = null;
+
+  isAdmin = false;
+
+  selectedOfficerId: number | null = null;
+
+  constructor(
+  private auth: Auth
+) {}
+
+
+  ngOnInit() {
+
+  this.loggedInUser = this.auth.getLoggedInUser();
+
+  if (!this.loggedInUser) {
+
+    this.warningMessage =
+      'No user is logged in.';
+
+    return;
+
+  }
+
+  this.isAdmin = this.loggedInUser.role === 'Admin';
+
+  if (!this.isAdmin) {
+
+    this.loadLoggedInOfficer();
+
+  }
+
+}
+
+getProjectName(projectId: number): string {
+
+  const project = this.projects.find(
+    p => p.id === projectId
+  );
+
+  return project ? project.name : '';
+
+}
+  // =======================
+  // Project Selection
+  // =======================
+
   onProjectChange() {
 
+    if (this.isAdmin) {
+
+  this.selectedOfficer = null;
+
+  this.selectedOfficerId = null;
+
+}
+
+  this.requiredStaff = [];
+
+  this.eligibleEmployees = [];
+
+  this.warningMessage = '';
+
+  const selectedProject = this.projects.find(
+
+    project => project.id === Number(this.selectedProject)
+
+  );
+
+  if (!selectedProject) {
+
+    return;
+
+  }
+
+  // Admin chooses officer manually
+  if (this.isAdmin && this.selectedOfficerId) {
+
     this.selectedOfficer = this.officers.find(
-      officer => officer.project === this.selectedProject
+
+      officer => officer.id === this.selectedOfficerId
+
     );
-
-    this.requiredStaff = [];
-
-    this.recommendedEmployees = [];
-
-    const projectRoles = this.designations.filter(
-      designation => designation.project === this.selectedProject
-    );
-
-    projectRoles.forEach(role => {
-
-      this.requiredStaff.push({
-
-        role: role.role,
-
-        count: 0
-
-      });
-
-    });
 
   }
 
-  recommendEmployees() {
+  const projectRoles = this.dutyRoles.filter(
 
-    this.recommendedEmployees = [];
+    role => role.projectId === selectedProject.id
 
-    if (!this.selectedOfficer) {
+  );
 
-      alert('Please select a project.');
+  projectRoles.forEach(role => {
+
+    this.requiredStaff.push({
+
+      dutyRole: role.dutyRole,
+
+      count: 0
+
+    });
+
+  });
+
+}
+
+  // =======================
+  // Navigation
+  // =======================
+
+  nextStep() {
+
+  if (this.currentStep !== 1) {
+
+    this.currentStep++;
+
+    return;
+
+  }
+
+  if (!this.selectedProject) {
+
+    alert('Please select a project.');
+
+    return;
+
+  }
+
+  if (this.isAdmin && !this.selectedOfficer) {
+
+  alert('Please select an officer.');
+
+  return;
+
+}
+
+  let totalEmployees = 0;
+
+  for (const staff of this.requiredStaff) {
+
+    staff.count = Number(staff.count);
+
+    if (staff.count < 0) {
+
+      alert('Employee count cannot be negative.');
 
       return;
 
     }
 
-    this.requiredStaff.forEach(staff => {
+    if (!Number.isInteger(staff.count)) {
 
-      const matchingEmployees = this.employees.filter(emp =>
-
-        emp.designation === staff.role &&
-
-        emp.constituency === this.selectedOfficer.constituency &&
-
-        !emp.isAssigned
-
-      );
-
-      const selectedEmployees = matchingEmployees.slice(
-        0,
-        Number(staff.count)
-      );
-
-      this.recommendedEmployees.push(...selectedEmployees);
-
-    });
-
-    if (this.recommendedEmployees.length === 0) {
-
-      alert('No suitable employees found.');
-
-    }
-
-  }
-
-  assignDuty() {
-
-    if (this.recommendedEmployees.length === 0) {
-
-      alert('Please recommend employees first.');
+      alert('Please enter whole numbers only.');
 
       return;
 
     }
 
-    this.recommendedEmployees.forEach(emp => {
+    totalEmployees += staff.count;
 
-      emp.isAssigned = true;
+  }
+
+  if (totalEmployees === 0) {
+
+    alert('Please enter the required number of employees for at least one duty role.');
+
+    return;
+
+  }
+
+  this.currentStep++;
+
+}
+
+  previousStep() {
+
+    if (this.currentStep > 1) {
+
+      this.currentStep--;
+
+    }
+
+  }
+
+  generateEmployees() {
+
+    this.employees.forEach(emp => {
+
+  emp.selected = false;
+
+});
+
+  if (this.assignmentMethod === 'manual') {
+
+    this.generateManualEmployees();
+
+  } else {
+
+    this.generateRecommendedEmployees();
+
+  }
+
+}
+
+generateManualEmployees() {
+
+  this.eligibleEmployees = [];
+  this.availabilityMessages = [];
+
+  this.requiredStaff.forEach(staff => {
+
+    const rule = this.eligibilityRules.find(
+
+  r =>
+
+    r.projectId === Number(this.selectedProject) &&
+
+    r.dutyRole === staff.dutyRole
+
+);
+    if (!rule) {
+
+      return;
+
+    }
+
+    const employees = this.employees.filter(emp =>
+
+  rule.eligibleDesignations.includes(emp.designation) &&
+
+  !emp.isAssigned
+
+);
+
+const shuffledEmployees = this.shuffleEmployees(employees);
+
+const selectedEmployees = shuffledEmployees.slice(
+  0,
+  Number(staff.count)
+);
+
+if (selectedEmployees.length < Number(staff.count)) {
+
+  this.availabilityMessages.push(
+
+    `${staff.dutyRole}: Required ${staff.count}, Available ${selectedEmployees.length}`
+
+  );
+
+}
+
+this.eligibleEmployees.push({
+
+  dutyRole: staff.dutyRole,
+
+  required: staff.count,
+
+  employees: selectedEmployees
+
+});
+
+  });
+
+  if (this.availabilityMessages.length > 0) {
+
+  this.warningMessage =
+    'Some requested employees are unavailable.\n\n' +
+    this.availabilityMessages.join('\n') +
+    '\n\nOnly the available employees have been displayed.';
+
+} else {
+
+  this.warningMessage = '';
+
+}
+
+}
+
+generateRecommendedEmployees() {
+
+
+  if (!this.selectedOfficer) {
+
+  alert('Please select an officer.');
+
+  return;
+
+}
+
+  this.eligibleEmployees = [];
+  this.availabilityMessages = [];
+
+  this.requiredStaff.forEach(staff => {
+
+    const rule = this.eligibilityRules.find(
+
+  r =>
+
+    r.projectId === Number(this.selectedProject) &&
+
+    r.dutyRole === staff.dutyRole
+
+);
+
+    if (!rule) {
+
+      return;
+
+    }
+
+    const employees = this.employees.filter(emp =>
+
+  rule.eligibleDesignations.includes(emp.designation) &&
+
+  emp.constituency === this.selectedOfficer.constituency &&
+
+  !emp.isAssigned
+
+);
+
+const shuffledEmployees = this.shuffleEmployees(employees);
+
+const recommended = shuffledEmployees.slice(
+  0,
+  Number(staff.count)
+);
+
+if (recommended.length < Number(staff.count)) {
+
+  this.availabilityMessages.push(
+
+    `${staff.dutyRole}: Required ${staff.count}, Available ${recommended.length}`
+
+  );
+
+}
+
+recommended.forEach(emp => {
+
+  emp.selected = true;
+
+});
+
+this.eligibleEmployees.push({
+
+  dutyRole: staff.dutyRole,
+
+  required: staff.count,
+
+  employees: recommended
+
+});
+
+  });
+
+  if (this.availabilityMessages.length > 0) {
+
+  this.warningMessage =
+    'Some requested employees are unavailable.\n\n' +
+    this.availabilityMessages.join('\n') +
+    '\n\nOnly the available employees have been displayed.';
+
+} else {
+
+  this.warningMessage = '';
+
+}
+
+}
+
+shuffleEmployees(employees: any[]) {
+
+  const shuffled = [...employees];
+
+  for (let i = shuffled.length - 1; i > 0; i--) {
+
+    const j = Math.floor(Math.random() * (i + 1));
+
+    [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+
+  }
+
+  return shuffled;
+
+}
+
+assignDuties() {
+
+  let assignedCount = 0;
+
+  this.eligibleEmployees.forEach(group => {
+
+    group.employees.forEach((emp: any) => {
+
+      if (emp.selected) {
+
+        emp.isAssigned = true;
+
+        emp.selected = false;
+
+        assignedCount++;
+
+      }
 
     });
 
-    alert(
-      `${this.recommendedEmployees.length} employee(s) assigned successfully.`
-    );
+  });
+
+  if (assignedCount === 0) {
+
+    alert('Please select at least one employee.');
+
+    return;
 
   }
+
+  alert(`${assignedCount} employee(s) assigned successfully.`);
+
+  this.currentStep = 1;
+
+this.selectedProject = 0;
+
+this.requiredStaff = [];
+
+this.eligibleEmployees = [];
+
+this.assignmentMethod = 'manual';
+
+this.warningMessage = '';
+
+this.availabilityMessages = [];
+
+if (this.isAdmin) {
+
+  this.selectedOfficer = null;
+
+  this.selectedOfficerId = null;
+
+} else {
+
+  this.loadLoggedInOfficer();
+
+}
+
+}
+
+onOfficerChange() {
+
+  this.selectedOfficer = this.officers.find(
+
+    officer => officer.id === Number(this.selectedOfficerId)
+
+  );
+
+}
+
+loadLoggedInOfficer() {
+
+  const userId = this.auth.getLoggedInUserId();
+
+  this.selectedOfficer = this.officers.find(
+
+    officer => officer.userId === userId
+
+  );
+
+  if (!this.selectedOfficer) {
+
+    this.warningMessage =
+`⚠ No officer found for the logged-in account.
+
+Please contact the administrator.`;
+
+  }
+
+}
 
 }

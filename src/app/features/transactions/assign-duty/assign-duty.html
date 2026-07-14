@@ -1,163 +1,297 @@
 <div class="assign-duty">
 
-  <h2>Assign Duty</h2>
+    <h2>Assign Duty</h2>
 
-  <!-- Project Selection -->
+    <h3>Step {{ currentStep }} of 4</h3>
 
-  <div class="form-section">
+    <!-- ================= STEP 1 ================= -->
 
-    <label>Select Project</label>
+    <div *ngIf="currentStep === 1">
 
-    <select
-      [(ngModel)]="selectedProject"
-      (change)="onProjectChange()">
+        <!-- Project Selection -->
 
-      <option value="">
-        Select Project
-      </option>
+        <div class="form-section">
 
-      <option
-        *ngFor="let project of projects"
-        [value]="project.name">
+            <label>Select Project</label>
 
-        {{ project.name }}
+            <select
+                [(ngModel)]="selectedProject"
+                (change)="onProjectChange()">
 
-      </option>
+                <option [ngValue]="0">
+                    Select Project
+                </option>
 
-    </select>
+                <option
+                    *ngFor="let project of projects"
+                    [ngValue]="project.id">
 
-  </div>
+                    {{ project.name }}
 
-  <!-- Officer Details -->
+                </option>
 
-  <div
-    class="officer-card"
-    *ngIf="selectedOfficer">
+            </select>
 
-    <h3>Officer Details</h3>
+        </div>
 
-    <p>
+        <!-- Admin Officer Selection -->
 
-      <strong>Name:</strong>
+        <div
+            class="form-section"
+            *ngIf="isAdmin">
 
-      {{ selectedOfficer.name }}
+            <label>Select Officer</label>
 
-    </p>
+            <select
+                [(ngModel)]="selectedOfficerId"
+                (change)="onOfficerChange()">
 
-    <p>
+                <option [ngValue]="null">
+                    Select Officer
+                </option>
 
-      <strong>Role:</strong>
+                <option
+                    *ngFor="let officer of officers"
+                    [ngValue]="officer.id">
 
-      {{ selectedOfficer.officerRole }}
+                    {{ officer.name }}
+                    ({{ officer.constituency }})
 
-    </p>
+                </option>
 
-    <p>
+            </select>
 
-      <strong>Constituency:</strong>
+        </div>
 
-      {{ selectedOfficer.constituency }}
+        <!-- Officer Details -->
 
-    </p>
+        <div
+            class="officer-card"
+            *ngIf="selectedOfficer">
 
-  </div>
+            <h3>Officer Details</h3>
 
-  <!-- Required Staff -->
+            <p>
+                <strong>Name:</strong>
+                {{ selectedOfficer.name }}
+            </p>
 
-  <div
-    class="staff-section"
-    *ngIf="requiredStaff.length > 0">
+            <p>
+                <strong>Role:</strong>
+                {{ selectedOfficer.officerRole }}
+            </p>
 
-    <h3>Required Staff</h3>
+            <p>
+                <strong>Constituency:</strong>
+                {{ selectedOfficer.constituency }}
+            </p>
 
-    <div
-      class="staff-row"
-      *ngFor="let staff of requiredStaff">
+        </div>
 
-      <label>
+        <!-- Required Staff -->
 
-        {{ staff.role }}
+        <div
+            class="staff-section"
+            *ngIf="requiredStaff.length > 0">
 
-      </label>
+            <h3>Required Staff</h3>
 
-      <input
-        type="number"
-        min="0"
-        [(ngModel)]="staff.count">
+            <div
+                class="staff-row"
+                *ngFor="let staff of requiredStaff">
+
+                <label>
+
+                    {{ staff.dutyRole }}
+
+                </label>
+
+                <input
+                    type="number"
+                    min="0"
+                    [(ngModel)]="staff.count">
+
+            </div>
+
+        </div>
+
+        <!-- Assignment Method -->
+
+        <div
+            class="method-section"
+            *ngIf="requiredStaff.length > 0">
+
+            <h3>Assignment Method</h3>
+
+            <label>
+
+                <input
+                    type="radio"
+                    name="method"
+                    value="manual"
+                    [(ngModel)]="assignmentMethod">
+
+                Manual Selection
+
+            </label>
+
+            <br><br>
+
+            <label>
+
+                <input
+                    type="radio"
+                    name="method"
+                    value="system"
+                    [(ngModel)]="assignmentMethod">
+
+                System Recommendation
+
+            </label>
+
+        </div>
+
+        <br>
+
+        <button
+            class="assign-btn"
+            *ngIf="requiredStaff.length > 0"
+            (click)="nextStep()">
+
+            Continue →
+
+        </button>
 
     </div>
 
-  </div>
+    <!-- ================= STEP 2 ================= -->
 
-  <!-- Buttons -->
+    <div *ngIf="currentStep === 2">
 
-  <div
-    class="buttons"
-    *ngIf="requiredStaff.length > 0">
+        <h3>Employee Selection</h3>
 
-    <button
-      class="recommend-btn"
-      (click)="recommendEmployees()">
+        <p>
 
-      🤖 Recommend Employees
+            <strong>Project:</strong>
 
-    </button>
+            {{ getProjectName(selectedProject) }}
 
-    <button
-      class="assign-btn"
-      (click)="assignDuty()">
+        </p>
 
-      Assign Duties
+        <p>
 
-    </button>
+            <strong>Officer:</strong>
 
-  </div>
+            {{ selectedOfficer?.name }}
 
-  <!-- Recommended Employees -->
+        </p>
 
-  <div
-    class="recommendation-section"
-    *ngIf="recommendedEmployees.length > 0">
+        <p>
 
-    <h3>Recommended Employees</h3>
+            <strong>Assignment Method:</strong>
 
-    <table>
+            {{ assignmentMethod === 'manual'
+                ? 'Manual Selection'
+                : 'System Recommendation' }}
 
-      <tr>
+        </p>
 
-        <th>Employee Code</th>
+        <button
+            class="recommend-btn"
+            (click)="generateEmployees()">
 
-        <th>Name</th>
+            Generate Employees
 
-        <th>Designation</th>
+        </button>
 
-        <th>Department</th>
+        <br><br>
 
-        <th>Constituency</th>
+        <!-- Warning Message -->
 
-        <th>Office</th>
+        <div
+            class="warning-box"
+            *ngIf="warningMessage">
 
-      </tr>
+            <pre>{{ warningMessage }}</pre>
 
-      <tr
-        *ngFor="let emp of recommendedEmployees">
+        </div>
 
-        <td>{{ emp.employeeCode }}</td>
+        <!-- Employee Groups -->
 
-        <td>{{ emp.name }}</td>
+        <div *ngFor="let group of eligibleEmployees">
 
-        <td>{{ emp.designation }}</td>
+            <h3>
 
-        <td>{{ emp.department }}</td>
+                {{ group.dutyRole }}
 
-        <td>{{ emp.constituency }}</td>
+                (Required: {{ group.required }})
 
-        <td>{{ emp.office }}</td>
+            </h3>
 
-      </tr>
+            <table>
 
-    </table>
+                <thead>
 
-  </div>
+                    <tr>
+
+                        <th>Select</th>
+                        <th>Employee Code</th>
+                        <th>Name</th>
+                        <th>Designation</th>
+                        <th>Department</th>
+                        <th>Office</th>
+
+                    </tr>
+
+                </thead>
+
+                <tbody>
+
+                    <tr *ngFor="let emp of group.employees">
+
+                        <td>
+
+                            <input
+                                type="checkbox"
+                                [(ngModel)]="emp.selected">
+
+                        </td>
+
+                        <td>{{ emp.employeeCode }}</td>
+
+                        <td>{{ emp.name }}</td>
+
+                        <td>{{ emp.designation }}</td>
+
+                        <td>{{ emp.department }}</td>
+
+                        <td>{{ emp.office }}</td>
+
+                    </tr>
+
+                </tbody>
+
+            </table>
+
+            <br>
+
+        </div>
+
+        <button
+            (click)="previousStep()">
+
+            ← Back
+
+        </button>
+
+        <button
+            class="assign-btn"
+            (click)="assignDuties()">
+
+            Assign Duties
+
+        </button>
+
+    </div>
 
 </div>

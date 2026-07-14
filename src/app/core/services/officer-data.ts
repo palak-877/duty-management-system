@@ -4,24 +4,32 @@ export const officerData = {
 
     {
       id: 1,
-      name: 'Ravi Kumar',
-      project: 'Election 2027',
-      officerRole: 'Nodal Officer',
-      constituency: 'Ludhiana East',
-      address: 'Model Town',
       userId: 'OFF001',
-      password: 'Temp@123'
+      name: 'Ravi Kumar',
+      officerRole: 'Nodal Officer',
+      projectId: 1,
+      constituency: 'Ludhiana East',
+      address: 'Model Town'
     },
 
     {
       id: 2,
-      name: 'Neha Sharma',
-      project: 'Population Census',
-      officerRole: 'Nodal Officer',
-      constituency: 'Ludhiana West',
-      address: 'Civil Lines',
       userId: 'OFF002',
-      password: 'Temp@456'
+      name: 'Neha Sharma',
+      officerRole: 'Nodal Officer',
+      projectId: 2,
+      constituency: 'Ludhiana West',
+      address: 'Civil Lines'
+    },
+
+    {
+      id: 3,
+      userId: 'OFF003',
+      name: 'Amit Singh',
+      officerRole: 'Nodal Officer',
+      projectId: 3,
+      constituency: 'Ludhiana East',
+      address: 'Haibowal'
     }
 
   ]

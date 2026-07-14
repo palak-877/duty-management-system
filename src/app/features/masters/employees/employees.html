@@ -3,104 +3,65 @@
   <div class="page-header">
 
     <div>
-        <h2>Employees</h2>
-        <p>Manage all employees available for duty assignment.</p>
+      <h2>Employees</h2>
+      <p>View all employees available for duty assignment.</p>
     </div>
 
-    <!-- <button
-        class="add-btn"
-        (click)="openModal()">
+  </div>
 
-        + Add Employee
-
-    </button> -->
-
-</div>
-
-  <!-- Filter (optional later) -->
   <div class="search-box">
 
     <input
-        type="text"
-        placeholder="Search Employee..."
-        [(ngModel)]="searchText">
+      type="text"
+      placeholder="Search by employee code, name, department, designation, constituency..."
+      [(ngModel)]="searchText">
 
-</div>
+  </div>
 
-  <!-- TABLE -->
   <table>
+
     <tr>
+
+      <th>Employee Code</th>
       <th>Name</th>
-<th>Department</th>
-<th>Phone</th>
-<th>Email</th>
+      <th>Department</th>
+      <th>Designation</th>
+      <th>Constituency</th>
+      <th>Phone</th>
+      <th>Email</th>
+      <th>Status</th>
+
     </tr>
 
     <tr *ngFor="let employee of filteredEmployees()">
 
-  <td>{{ employee.name }}</td>
-  <td>{{ employee.department }}</td>
-  <td>{{ employee.phone }}</td>
-  <td>{{ employee.email }}</td>
+      <td>{{ employee.employeeCode }}</td>
 
-</tr>
+      <td>{{ employee.name }}</td>
+
+      <td>{{ employee.department }}</td>
+
+      <td>{{ employee.designation }}</td>
+
+      <td>{{ employee.constituency }}</td>
+
+      <td>{{ employee.phone }}</td>
+
+      <td>{{ employee.email }}</td>
+
+      <td>
+
+        <span
+          [style.color]="employee.isAssigned ? 'red' : 'green'">
+
+          {{ employee.isAssigned ? 'Assigned' : 'Available' }}
+
+        </span>
+
+      </td>
+
+    </tr>
 
   </table>
 
-  <!-- <div class="modal-backdrop" *ngIf="showModal">
-
-    <div class="modal">
-
-        <h2>{{ isEditMode ? 'Edit Employee' : 'Add Employee' }}</h2>
-
-        <label>Name</label>
-
-        <input
-            type="text"
-            [(ngModel)]="name">
-
-        <label>Department</label>
-
-        <select [(ngModel)]="department">
-
-            <option>Education</option>
-            <option>Health</option>
-            <option>Revenue</option>
-
-        </select>
-
-        <label>Phone</label>
-
-        <input
-            type="text"
-            [(ngModel)]="phone">
-
-        <label>Email</label>
-
-        <input
-            type="email"
-            [(ngModel)]="email">
-
-        <div class="buttons">
-
-            <button
-                class="cancel-btn"
-                (click)="closeModal()">
-
-                Cancel
-
-            </button>
-
-            <button
-                class="save-btn">
-
-                {{ isEditMode ? 'Update' : 'Save' }}
-
-            </button>
-
-        </div>
-
-    </div>
-
-</div> -->
 </div>

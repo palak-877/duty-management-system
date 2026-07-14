@@ -1,11 +1,13 @@
 <div class="officers">
 
   <div class="page-header">
+
     <h2>Officers Management</h2>
 
     <button (click)="openModal()">
       + Create Officer
     </button>
+
   </div>
 
   <input
@@ -17,20 +19,26 @@
   <table>
 
     <tr>
+
       <th>Name</th>
       <th>Project</th>
       <th>Officer Role</th>
       <th>Constituency</th>
       <th>User ID</th>
       <th>Actions</th>
+
     </tr>
 
     <tr *ngFor="let officer of filteredOfficers()">
 
       <td>{{ officer.name }}</td>
-      <td>{{ officer.project }}</td>
+
+      <td>{{ getProjectName(officer.projectId) }}</td>
+
       <td>{{ officer.officerRole }}</td>
+
       <td>{{ officer.constituency }}</td>
+
       <td>{{ officer.userId }}</td>
 
       <td>
@@ -38,19 +46,25 @@
         <button
           class="view-btn"
           (click)="viewOfficer(officer)">
+
           View
+
         </button>
 
         <button
           class="edit-btn"
           (click)="editOfficer(officer)">
+
           Edit
+
         </button>
 
         <button
           class="delete-btn"
           (click)="deleteOfficer(officer.id)">
+
           Delete
+
         </button>
 
       </td>
@@ -60,7 +74,9 @@
     <tr *ngIf="filteredOfficers().length === 0">
 
       <td colspan="6" style="text-align:center; padding:20px;">
+
         No officers found.
+
       </td>
 
     </tr>
@@ -69,12 +85,16 @@
 
   <!-- Create / Edit Modal -->
 
-  <div class="modal" *ngIf="showModal">
+  <div
+    class="modal"
+    *ngIf="showModal">
 
     <div class="modal-content">
 
       <h2>
+
         {{ isEditMode ? 'Edit Officer' : 'Create Officer' }}
+
       </h2>
 
       <label>Officer Name</label>
@@ -87,11 +107,15 @@
 
       <select [(ngModel)]="selectedProject">
 
-        <option value="">Select Project</option>
+        <option value="">
+
+          Select Project
+
+        </option>
 
         <option
           *ngFor="let project of projects"
-          [value]="project.name">
+          [value]="project.id">
 
           {{ project.name }}
 
@@ -103,7 +127,11 @@
 
       <select [(ngModel)]="selectedOfficerRole">
 
-        <option value="">Select Officer Role</option>
+        <option value="">
+
+          Select Officer Role
+
+        </option>
 
         <option
           *ngFor="let role of officerRoles"
@@ -154,23 +182,61 @@
 
   <!-- View Officer Modal -->
 
-  <div class="modal" *ngIf="showViewModal">
+  <div
+    class="modal"
+    *ngIf="showViewModal">
 
     <div class="modal-content">
 
       <h2>Officer Details</h2>
 
-      <p><strong>Name:</strong> {{ selectedOfficer?.name }}</p>
+      <p>
 
-      <p><strong>Project:</strong> {{ selectedOfficer?.project }}</p>
+        <strong>Name:</strong>
 
-      <p><strong>Officer Role:</strong> {{ selectedOfficer?.officerRole }}</p>
+        {{ selectedOfficer?.name }}
 
-      <p><strong>Assembly Constituency:</strong> {{ selectedOfficer?.constituency }}</p>
+      </p>
 
-      <p><strong>Address:</strong> {{ selectedOfficer?.address }}</p>
+      <p>
 
-      <p><strong>User ID:</strong> {{ selectedOfficer?.userId }}</p>
+        <strong>Project:</strong>
+
+        {{ getProjectName(selectedOfficer?.projectId) }}
+
+      </p>
+
+      <p>
+
+        <strong>Officer Role:</strong>
+
+        {{ selectedOfficer?.officerRole }}
+
+      </p>
+
+      <p>
+
+        <strong>Assembly Constituency:</strong>
+
+        {{ selectedOfficer?.constituency }}
+
+      </p>
+
+      <p>
+
+        <strong>Address:</strong>
+
+        {{ selectedOfficer?.address }}
+
+      </p>
+
+      <p>
+
+        <strong>User ID:</strong>
+
+        {{ selectedOfficer?.userId }}
+
+      </p>
 
       <div class="buttons">
 

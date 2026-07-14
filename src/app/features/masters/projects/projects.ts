@@ -77,12 +77,16 @@ editingProjectId = 0;
     }
 
     this.projects.push({
-      id: this.projects.length + 1,
-      name: this.projectName,
-      type: this.projectType,
-      department: this.department,
-      startDate: this.startDate
-    });
+
+  id: this.projects.length + 1,
+  name: this.projectName,
+  type: this.projectType,
+  department: this.department,
+  startDate: this.startDate,
+
+  officerId: 0
+
+});
 
   }
 
