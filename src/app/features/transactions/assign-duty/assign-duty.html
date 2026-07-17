@@ -1,100 +1,133 @@
 <div class="assign-duty">
 
-    <h2>Assign Duty</h2>
+    <div class="page-header">
 
-    <h3>Step {{ currentStep }} of 4</h3>
+        <h2>Assign Duty</h2>
+
+        <span class="step-badge">
+
+            Step {{ currentStep }} of 4
+
+        </span>
+
+    </div>
 
     <!-- ================= STEP 1 ================= -->
 
     <div *ngIf="currentStep === 1">
 
-        <!-- Project Selection -->
+        <div class="top-grid">
 
-        <div class="form-section">
+            <!-- Project Card -->
 
-            <label>Select Project</label>
+            <div class="card">
 
-            <select
-                [(ngModel)]="selectedProject"
-                (change)="onProjectChange()">
+                <h3>📋 Project Details</h3>
 
-                <option [ngValue]="0">
-                    Select Project
-                </option>
+                <div class="form-group">
 
-                <option
-                    *ngFor="let project of projects"
-                    [ngValue]="project.id">
+                    <label>Select Project</label>
 
-                    {{ project.name }}
+                    <select
+                        [(ngModel)]="selectedProject"
+                        (change)="onProjectChange()">
 
-                </option>
+                        <option [ngValue]="0">
 
-            </select>
+                            Select Project
 
-        </div>
+                        </option>
 
-        <!-- Admin Officer Selection -->
+                        <option
+                            *ngFor="let project of projects"
+                            [ngValue]="project.id">
 
-        <div
-            class="form-section"
-            *ngIf="isAdmin">
+                            {{ project.name }}
 
-            <label>Select Officer</label>
+                        </option>
 
-            <select
-                [(ngModel)]="selectedOfficerId"
-                (change)="onOfficerChange()">
+                    </select>
 
-                <option [ngValue]="null">
-                    Select Officer
-                </option>
+                </div>
 
-                <option
-                    *ngFor="let officer of officers"
-                    [ngValue]="officer.id">
+            </div>
 
-                    {{ officer.name }}
-                    ({{ officer.constituency }})
+            <!-- Officer Card -->
 
-                </option>
+            <div class="card">
 
-            </select>
+                <h3>👤 Officer Details</h3>
 
-        </div>
+                <div
+                    class="form-group"
+                    *ngIf="isAdmin">
 
-        <!-- Officer Details -->
+                    <label>Select Officer</label>
 
-        <div
-            class="officer-card"
-            *ngIf="selectedOfficer">
+                    <select
+                        [(ngModel)]="selectedOfficerId"
+                        (change)="onOfficerChange()">
 
-            <h3>Officer Details</h3>
+                        <option [ngValue]="null">
 
-            <p>
-                <strong>Name:</strong>
-                {{ selectedOfficer.name }}
-            </p>
+                            Select Officer
 
-            <p>
-                <strong>Role:</strong>
-                {{ selectedOfficer.officerRole }}
-            </p>
+                        </option>
 
-            <p>
-                <strong>Constituency:</strong>
-                {{ selectedOfficer.constituency }}
-            </p>
+                        <option
+                            *ngFor="let officer of officers"
+                            [ngValue]="officer.id">
+
+                            {{ officer.name }}
+                            ({{ officer.constituency }})
+
+                        </option>
+
+                    </select>
+
+                </div>
+
+                <div
+                    class="officer-info"
+                    *ngIf="selectedOfficer">
+
+                    <div>
+
+                        <span>Name</span>
+
+                        <strong>{{ selectedOfficer.name }}</strong>
+
+                    </div>
+
+                    <div>
+
+                        <span>Role</span>
+
+                        <strong>{{ selectedOfficer.officerRole }}</strong>
+
+                    </div>
+
+                    <div>
+
+                        <span>Constituency</span>
+
+                        <strong>{{ selectedOfficer.constituency }}</strong>
+
+                    </div>
+
+                </div>
+
+            </div>
 
         </div>
 
         <!-- Required Staff -->
 
         <div
-            class="staff-section"
+            class="card"
             *ngIf="requiredStaff.length > 0">
 
-            <h3>Required Staff</h3>
+            <h3>👥 Required Staff</h3>
 
             <div
                 class="staff-row"
@@ -118,49 +151,54 @@
         <!-- Assignment Method -->
 
         <div
-            class="method-section"
+            class="card"
             *ngIf="requiredStaff.length > 0">
 
-            <h3>Assignment Method</h3>
+            <h3>⚙ Assignment Method</h3>
 
-            <label>
+            <div class="radio-group">
 
-                <input
-                    type="radio"
-                    name="method"
-                    value="manual"
-                    [(ngModel)]="assignmentMethod">
+                <label>
 
-                Manual Selection
+                    <input
+                        type="radio"
+                        name="method"
+                        value="manual"
+                        [(ngModel)]="assignmentMethod">
 
-            </label>
+                    Manual Selection
 
-            <br><br>
+                </label>
 
-            <label>
+                <label>
 
-                <input
-                    type="radio"
-                    name="method"
-                    value="system"
-                    [(ngModel)]="assignmentMethod">
+                    <input
+                        type="radio"
+                        name="method"
+                        value="system"
+                        [(ngModel)]="assignmentMethod">
 
-                System Recommendation
+                    System Recommendation
 
-            </label>
+                </label>
+
+            </div>
 
         </div>
 
-        <br>
+        <div
+            class="action-bar"
+            *ngIf="requiredStaff.length > 0">
 
-        <button
-            class="assign-btn"
-            *ngIf="requiredStaff.length > 0"
-            (click)="nextStep()">
+            <button
+                class="assign-btn"
+                (click)="nextStep()">
 
-            Continue →
+                Continue →
 
-        </button>
+            </button>
+
+        </div>
 
     </div>
 
@@ -168,33 +206,39 @@
 
     <div *ngIf="currentStep === 2">
 
-        <h3>Employee Selection</h3>
+        <div class="summary-card">
 
-        <p>
+            <div>
 
-            <strong>Project:</strong>
+                <span>Project</span>
 
-            {{ getProjectName(selectedProject) }}
+                <strong>{{ getProjectName(selectedProject) }}</strong>
 
-        </p>
+            </div>
 
-        <p>
+            <div>
 
-            <strong>Officer:</strong>
+                <span>Officer</span>
 
-            {{ selectedOfficer?.name }}
+                <strong>{{ selectedOfficer?.name }}</strong>
 
-        </p>
+            </div>
 
-        <p>
+            <div>
 
-            <strong>Assignment Method:</strong>
+                <span>Method</span>
 
-            {{ assignmentMethod === 'manual'
-                ? 'Manual Selection'
-                : 'System Recommendation' }}
+                <strong>
 
-        </p>
+                    {{ assignmentMethod === 'manual'
+                    ? 'Manual Selection'
+                    : 'System Recommendation' }}
+
+                </strong>
+
+            </div>
+
+        </div>
 
         <button
             class="recommend-btn"
@@ -204,10 +248,6 @@
 
         </button>
 
-        <br><br>
-
-        <!-- Warning Message -->
-
         <div
             class="warning-box"
             *ngIf="warningMessage">
@@ -216,9 +256,9 @@
 
         </div>
 
-        <!-- Employee Groups -->
-
-        <div *ngFor="let group of eligibleEmployees">
+        <div
+            class="employee-card"
+            *ngFor="let group of eligibleEmployees">
 
             <h3>
 
@@ -258,13 +298,9 @@
                         </td>
 
                         <td>{{ emp.employeeCode }}</td>
-
                         <td>{{ emp.name }}</td>
-
                         <td>{{ emp.designation }}</td>
-
                         <td>{{ emp.department }}</td>
-
                         <td>{{ emp.office }}</td>
 
                     </tr>
@@ -273,24 +309,27 @@
 
             </table>
 
-            <br>
-
         </div>
 
-        <button
-            (click)="previousStep()">
+        <div class="action-bar">
 
-            ← Back
+            <button
+                class="back-btn"
+                (click)="previousStep()">
 
-        </button>
+                ← Back
 
-        <button
-            class="assign-btn"
-            (click)="assignDuties()">
+            </button>
 
-            Assign Duties
+            <button
+                class="assign-btn"
+                (click)="assignDuties()">
 
-        </button>
+                Assign Duties
+
+            </button>
+
+        </div>
 
     </div>
 

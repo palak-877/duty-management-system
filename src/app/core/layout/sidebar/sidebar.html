@@ -1,10 +1,22 @@
 <nav class="sidebar">
 
-    <!-- ================= ADMIN ONLY ================= -->
+    <!-- ================= Logo ================= -->
+
+    <div class="sidebar-logo">
+
+        <div>
+
+            <h2>DMS</h2>
+
+            <span>Duty Management System</span>
+
+        </div>
+
+    </div>
+
+    <!-- ================= ADMIN ================= -->
 
     <div *ngIf="role === 'Admin'">
-
-        <!-- Dashboard -->
 
         <a
             routerLink="/dashboard"
@@ -21,11 +33,19 @@
             class="menu-heading"
             (click)="toggleMasters()">
 
-            {{ showMasters ? '▼' : '▶' }} Masters
+            <span>Masters</span>
+
+            <span>
+
+                {{ showMasters ? '▼' : '▶' }}
+
+            </span>
 
         </div>
 
-        <div *ngIf="showMasters">
+        <div
+            class="submenu"
+            *ngIf="showMasters">
 
             <a
                 routerLink="/officers"
@@ -50,7 +70,7 @@
                 routerLinkActive="active"
                 class="submenu-item">
 
-                Designations
+                Duty Roles
 
             </a>
 
@@ -67,19 +87,25 @@
 
     </div>
 
-    <!-- ================= BOTH ADMIN & OFFICER ================= -->
-
-    <!-- Transactions -->
+    <!-- ================= Transactions ================= -->
 
     <div
         class="menu-heading"
         (click)="toggleTransactions()">
 
-        {{ showTransactions ? '▼' : '▶' }} Transactions
+        <span>Transactions</span>
+
+        <span>
+
+            {{ showTransactions ? '▼' : '▶' }}
+
+        </span>
 
     </div>
 
-    <div *ngIf="showTransactions">
+    <div
+        class="submenu"
+        *ngIf="showTransactions">
 
         <a
             routerLink="/transactions"
@@ -92,17 +118,25 @@
 
     </div>
 
-    <!-- Reports -->
+    <!-- ================= Reports ================= -->
 
     <div
         class="menu-heading"
         (click)="toggleReports()">
 
-        {{ showReports ? '▼' : '▶' }} Reports
+        <span>Reports</span>
+
+        <span>
+
+            {{ showReports ? '▼' : '▶' }}
+
+        </span>
 
     </div>
 
-    <div *ngIf="showReports">
+    <div
+        class="submenu"
+        *ngIf="showReports">
 
         <a
             routerLink="/reports"

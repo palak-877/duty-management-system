@@ -14,7 +14,7 @@ export const authData = {
     {
       id: 2,
       username: 'OFF001',
-      name: 'Rajesh Kumar',
+      name: 'Ravi Kumar',
       password: 'Officer@123',
       role: 'Officer',
       officerId: 1
@@ -23,7 +23,7 @@ export const authData = {
     {
       id: 3,
       username: 'OFF002',
-      name: 'Aman Sharma',
+      name: 'Neha Sharma',
       password: 'Officer@123',
       role: 'Officer',
       officerId: 2
@@ -32,7 +32,7 @@ export const authData = {
     {
       id: 4,
       username: 'OFF003',
-      name: 'Priya Verma',
+      name: 'Amit Singh',
       password: 'Officer@123',
       role: 'Officer',
       officerId: 3

@@ -1,61 +1,398 @@
 .assign-duty {
-  padding: 20px;
+  padding: 30px;
+  max-width: 1300px;
+  margin: auto;
 }
 
-.filters {
+/* ================= Header ================= */
+
+.page-header {
   display: flex;
-  gap: 10px;
-  margin-bottom: 15px;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
 }
 
-select {
-  padding: 6px;
+.page-header h2 {
+  margin: 0;
+  font-size: 28px;
+  color: #1e293b;
 }
+
+.step-badge {
+  background: #2563eb;
+  color: white;
+  padding: 8px 18px;
+  border-radius: 30px;
+  font-weight: 600;
+}
+
+/* ================= Cards ================= */
+
+.top-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(420px, 1fr));
+  gap: 25px;
+  margin-bottom: 25px;
+}
+
+.card,
+.employee-card,
+.summary-card {
+  background: white;
+  border-radius: 12px;
+  padding: 22px;
+  margin-bottom: 25px;
+  box-shadow: 0 3px 12px rgba(0, 0, 0, 0.08);
+}
+
+.card h3,
+.employee-card h3 {
+  margin-top: 0;
+  color: #1f2937;
+}
+
+/* ================= Form ================= */
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.form-group label {
+  margin-bottom: 8px;
+  font-weight: 600;
+}
+
+select,
+input[type="number"] {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid #cbd5e1;
+  border-radius: 6px;
+  font-size: 15px;
+}
+
+.staff-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+  gap: 20px;
+}
+
+.staff-row label {
+  font-weight: 500;
+}
+
+.staff-row input {
+  width: 120px;
+}
+
+/* ================= Radio Buttons ================= */
+
+.radio-group {
+  display: flex;
+  gap: 40px;
+  margin-top: 15px;
+}
+
+.radio-group label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 500;
+}
+
+/* ================= Summary ================= */
+
+.summary-card {
+  display: flex;
+  justify-content: space-between;
+  gap: 30px;
+  flex-wrap: wrap;
+}
+
+.summary-card div {
+  flex: 1;
+  min-width: 220px;
+}
+
+.summary-card span {
+  display: block;
+  color: gray;
+  font-size: 14px;
+}
+
+.summary-card strong {
+  font-size: 18px;
+}
+
+/* ================= Tables ================= */
 
 table {
   width: 100%;
   border-collapse: collapse;
+  margin-top: 15px;
 }
 
-th, td {
-  border: 1px solid #ddd;
+th {
+  background: #2563eb;
+  color: white;
+  padding: 12px;
+  text-align: left;
+}
+
+td {
   padding: 10px;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+tr:nth-child(even) {
+  background: #f8fafc;
+}
+
+tr:hover {
+  background: #eef5ff;
+}
+
+/* ================= Buttons ================= */
+
+.action-bar {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 30px;
+}
+
+.assign-btn,
+.recommend-btn,
+.back-btn {
+  border: none;
+  border-radius: 6px;
+  padding: 11px 24px;
+  font-size: 15px;
+  cursor: pointer;
+  transition: 0.25s;
 }
 
 .assign-btn {
-  margin-top: 15px;
-  padding: 10px;
-  background: green;
+  background: #16a34a;
   color: white;
-  border: none;
 }
 
+.assign-btn:hover {
+  background: #15803d;
+}
+
+.recommend-btn {
+  background: #2563eb;
+  color: white;
+  margin-bottom: 20px;
+}
+
+.recommend-btn:hover {
+  background: #1d4ed8;
+}
+
+.back-btn {
+  background: #64748b;
+  color: white;
+}
+
+.back-btn:hover {
+  background: #475569;
+}
+
+/* ================= Warning ================= */
+
 .warning-box {
-
-    margin: 20px 0;
-
-    padding: 15px;
-
-    background: #fff3cd;
-
-    border: 1px solid #ffeeba;
-
-    border-left: 6px solid #ff9800;
-
-    border-radius: 8px;
-
+  margin: 20px 0;
+  padding: 15px;
+  background: #fff3cd;
+  border: 1px solid #ffeeba;
+  border-left: 6px solid #ff9800;
+  border-radius: 8px;
 }
 
 .warning-box pre {
+  margin: 0;
+  white-space: pre-wrap;
+  font-family: inherit;
+  color: #856404;
+  font-size: 15px;
+}
 
-    margin: 0;
+/* ================= Responsive ================= */
 
-    white-space: pre-wrap;
+@media (max-width: 768px) {
 
-    font-family: inherit;
+  .top-grid {
+    grid-template-columns: 1fr;
+  }
 
-    color: #856404;
+  .summary-card {
+    flex-direction: column;
+  }
 
-    font-size: 15px;
+  .staff-row {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .staff-row input {
+    width: 100%;
+  }
+
+  .radio-group {
+    flex-direction: column;
+    gap: 15px;
+  }
+
+  .action-bar {
+    flex-direction: column;
+    gap: 15px;
+  }
+
+  .assign-btn,
+  .back-btn,
+  .recommend-btn {
+    width: 100%;
+  }
+
+}
+
+/* ================= Card Hover ================= */
+
+.card,
+.employee-card,
+.summary-card {
+
+  transition: transform 0.25s ease,
+              box-shadow 0.25s ease;
+
+}
+
+.card:hover,
+.employee-card:hover,
+.summary-card:hover {
+
+  transform: translateY(-3px);
+
+  box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+
+}
+
+/* ================= Officer Details ================= */
+
+.officer-info {
+
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 18px;
+
+  margin-top: 20px;
+
+}
+
+.officer-info div {
+
+  background: #f8fafc;
+
+  padding: 14px;
+
+  border-radius: 8px;
+
+  border-left: 4px solid #2563eb;
+
+}
+
+.officer-info span {
+
+  display: block;
+
+  color: #64748b;
+
+  font-size: 13px;
+
+  margin-bottom: 4px;
+
+}
+
+.officer-info strong {
+
+  font-size: 16px;
+
+  color: #1e293b;
+
+}
+
+/* ================= Better Inputs ================= */
+
+select:focus,
+input[type="number"]:focus {
+
+  outline: none;
+
+  border-color: #2563eb;
+
+  box-shadow: 0 0 0 3px rgba(37,99,235,0.15);
+
+}
+
+/* ================= Checkbox ================= */
+
+input[type="checkbox"] {
+
+  transform: scale(1.15);
+
+  cursor: pointer;
+
+}
+
+/* ================= Radio ================= */
+
+input[type="radio"] {
+
+  transform: scale(1.1);
+
+  cursor: pointer;
+
+}
+
+/* ================= Table ================= */
+
+tbody tr {
+
+  transition: background 0.2s ease;
+
+}
+
+/* ================= Buttons ================= */
+
+.assign-btn,
+.back-btn,
+.recommend-btn {
+
+  font-weight: 600;
+
+  letter-spacing: .3px;
+
+}
+
+.assign-btn:active,
+.back-btn:active,
+.recommend-btn:active {
+
+  transform: scale(.98);
+
+}
+
+/* ================= Smooth ================= */
+
+* {
+
+  box-sizing: border-box;
 
 }

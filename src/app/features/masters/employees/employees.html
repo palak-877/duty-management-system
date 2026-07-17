@@ -1,67 +1,155 @@
 <div class="employees">
 
-  <div class="page-header">
+    <!-- ================= Header ================= -->
 
-    <div>
-      <h2>Employees</h2>
-      <p>View all employees available for duty assignment.</p>
+    <div class="page-header">
+
+        <div>
+
+            <h2>Employees Management</h2>
+
+            <p class="page-subtitle">
+                View and monitor employees available for duty assignment.
+            </p>
+
+        </div>
+
     </div>
 
-  </div>
+    <!-- ================= Statistics ================= -->
 
-  <div class="search-box">
+    <div class="stats-grid">
 
-    <input
-      type="text"
-      placeholder="Search by employee code, name, department, designation, constituency..."
-      [(ngModel)]="searchText">
+        <div class="stat-card">
 
-  </div>
+            <span>Total Employees</span>
 
-  <table>
+            <h2>{{ filteredEmployees().length }}</h2>
 
-    <tr>
+        </div>
 
-      <th>Employee Code</th>
-      <th>Name</th>
-      <th>Department</th>
-      <th>Designation</th>
-      <th>Constituency</th>
-      <th>Phone</th>
-      <th>Email</th>
-      <th>Status</th>
+        <div class="stat-card available">
 
-    </tr>
+            <span>Available</span>
 
-    <tr *ngFor="let employee of filteredEmployees()">
+            <h2>
 
-      <td>{{ employee.employeeCode }}</td>
+                {{ filteredEmployees().filter(e => !e.isAssigned).length }}
 
-      <td>{{ employee.name }}</td>
+            </h2>
 
-      <td>{{ employee.department }}</td>
+        </div>
 
-      <td>{{ employee.designation }}</td>
+        <div class="stat-card assigned">
 
-      <td>{{ employee.constituency }}</td>
+            <span>Assigned</span>
 
-      <td>{{ employee.phone }}</td>
+            <h2>
 
-      <td>{{ employee.email }}</td>
+                {{ filteredEmployees().filter(e => e.isAssigned).length }}
 
-      <td>
+            </h2>
 
-        <span
-          [style.color]="employee.isAssigned ? 'red' : 'green'">
+        </div>
 
-          {{ employee.isAssigned ? 'Assigned' : 'Available' }}
+    </div>
 
-        </span>
+    <!-- ================= Search ================= -->
 
-      </td>
+    <div class="search-card">
 
-    </tr>
+        <input
+            type="text"
+            class="search-input"
+            placeholder="🔍 Search by Employee Code, Name, Department, Designation or Constituency..."
+            [(ngModel)]="searchText">
 
-  </table>
+    </div>
+
+    <!-- ================= Table ================= -->
+
+    <div class="table-card">
+
+        <table>
+
+            <thead>
+
+                <tr>
+
+                    <th>Employee Code</th>
+                    <th>Name</th>
+                    <th>Department</th>
+                    <th>Designation</th>
+                    <th>Constituency</th>
+                    <th>Phone</th>
+                    <th>Email</th>
+                    <th>Status</th>
+
+                </tr>
+
+            </thead>
+
+            <tbody>
+
+                <tr *ngFor="let employee of filteredEmployees()">
+
+                    <td>
+
+                        <span class="employee-code">
+
+                            {{ employee.employeeCode }}
+
+                        </span>
+
+                    </td>
+
+                    <td>
+
+                        <strong>{{ employee.name }}</strong>
+
+                    </td>
+
+                    <td>{{ employee.department }}</td>
+
+                    <td>{{ employee.designation }}</td>
+
+                    <td>{{ employee.constituency }}</td>
+
+                    <td>{{ employee.phone }}</td>
+
+                    <td>{{ employee.email }}</td>
+
+                    <td>
+
+                        <span
+                            class="status-badge"
+                            [class.available-badge]="!employee.isAssigned"
+                            [class.assigned-badge]="employee.isAssigned">
+
+                            {{ employee.isAssigned ? 'Assigned' : 'Available' }}
+
+                        </span>
+
+                    </td>
+
+                </tr>
+
+                <tr *ngIf="filteredEmployees().length === 0">
+
+                    <td
+                        colspan="8"
+                        class="empty-row">
+
+                        No employees found.
+
+                    </td>
+
+                </tr>
+
+            </tbody>
+
+        </table>
+
+    </div>
 
 </div>

@@ -1,14 +1,37 @@
 <header class="header">
-  <div class="logo">
-    Duty Management System
-  </div>
 
-  <div class="right">
-    <span class="user">Admin</span>
-    <a
-    routerLink="/login"
-    class="logout">
-    Logout
-</a>
-  </div>
+    <div class="logo">
+
+        <strong>Duty Management System</strong>
+
+    </div>
+
+    <div class="right">
+
+        <div class="user-info">
+
+            <span class="user-name">
+
+                👤 {{ loggedInUser?.name }}
+
+            </span>
+
+            <span class="user-role">
+
+                {{ loggedInUser?.role }}
+
+            </span>
+
+        </div>
+
+        <button
+            class="logout"
+            (click)="logout()">
+
+            Logout
+
+        </button>
+
+    </div>
+
 </header>

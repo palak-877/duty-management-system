@@ -1,60 +1,65 @@
 <div class="dashboard">
 
-    <!-- Header -->
+    <!-- ================= Header ================= -->
 
     <div class="dashboard-header">
 
-        <h1>Duty Management System</h1>
+        <div>
 
-        <p>District Administration, Ludhiana</p>
+            <h1>Duty Management System</h1>
+
+            <p>District Administration, Ludhiana</p>
+
+        </div>
 
     </div>
 
-    <!-- Welcome -->
+    <!-- ================= Welcome ================= -->
 
     <div class="welcome-card">
 
-        <h2>
+        <div>
 
-            Welcome, {{ loggedInUser?.name }} 👋
+            <h2>
+                Welcome, {{ loggedInUser?.name }} 👋
+            </h2>
 
-        </h2>
+            <p>
+                <strong>Logged in as:</strong>
+                {{ loggedInUser?.role }}
+            </p>
 
-        <p>
+            <!-- Admin Message -->
 
-            <strong>Logged in as:</strong>
+            <p *ngIf="loggedInUser?.role === 'Admin'">
+                Use the sidebar to manage Projects, Duty Roles,
+                Employees, Duty Assignments and Reports.
+            </p>
 
-            {{ loggedInUser?.role }}
+            <!-- Officer Message -->
 
-        </p>
+            <p *ngIf="loggedInUser?.role === 'Officer'">
+                Use the sidebar to assign duties, view assigned employees,
+                and access reports related to your assigned projects.
+            </p>
 
-        <!-- Admin -->
-
-<p *ngIf="loggedInUser?.role === 'Admin'">
-
-    Use the sidebar to manage Projects, Duty Roles,
-    Employees, Duty Assignments and Reports.
-
-</p>
-
-<!-- Officer -->
-
-<p *ngIf="loggedInUser?.role === 'Officer'">
-
-    Use the sidebar to assign duties, view assigned employees,
-    and access reports related to your assigned projects.
-
-</p>
+        </div>
 
     </div>
 
-    <!-- Quick Statistics -->
+    <!-- ================= Statistics ================= -->
 
-    <h2 class="section-title">Quick Statistics</h2>
+    <h2 class="section-title">
+        Dashboard Overview
+    </h2>
 
     <div class="stats">
 
-        <div class="stat-card">
+        <!-- Projects -->
+
+        <div class="stat-card projects">
+
+            <div class="icon">📁</div>
 
             <h3>Total Projects</h3>
 
@@ -62,7 +67,11 @@
 
         </div>
 
-        <div class="stat-card">
+        <!-- Duty Roles -->
+
+        <div class="stat-card roles">
+
+            <div class="icon">🛡️</div>
 
             <h3>Duty Roles</h3>
 
@@ -70,7 +79,11 @@
 
         </div>
 
-        <div class="stat-card">
+        <!-- Employees -->
+
+        <div class="stat-card employees">
+
+            <div class="icon">👥</div>
 
             <h3>Total Employees</h3>
 
@@ -78,7 +91,11 @@
 
         </div>
 
-        <div class="stat-card">
+        <!-- Assigned Duties -->
+
+        <div class="stat-card duties">
+
+            <div class="icon">✅</div>
 
             <h3>Assigned Duties</h3>
 
@@ -88,11 +105,15 @@
 
     </div>
 
-    <!-- Recent Activity -->
+    <!-- ================= Recent Activity ================= -->
 
     <div class="activity-card">
 
-        <h2>Recent Activity</h2>
+        <div class="card-header">
+
+            <h2>Recent Activity</h2>
+
+        </div>
 
         <table>
 

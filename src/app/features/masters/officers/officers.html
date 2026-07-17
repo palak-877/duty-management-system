@@ -1,89 +1,149 @@
 <div class="officers">
 
+  <!-- ================= Header ================= -->
+
   <div class="page-header">
 
-    <h2>Officers Management</h2>
+    <div>
 
-    <button (click)="openModal()">
+      <h2>Officers Management</h2>
+
+      <p class="page-subtitle">
+        Create, update and manage officer accounts.
+      </p>
+
+    </div>
+
+    <button
+      class="create-btn"
+      (click)="openModal()">
+
       + Create Officer
+
     </button>
 
   </div>
 
-  <input
-    class="search-box"
-    type="text"
-    placeholder="Search by name, project, role, constituency or User ID..."
-    [(ngModel)]="searchText">
+  <!-- ================= Search ================= -->
 
-  <table>
+  <div class="search-card">
 
-    <tr>
+    <input
+      class="search-box"
+      type="text"
+      placeholder="Search by Name, Project, Role, Constituency or User ID..."
+      [(ngModel)]="searchText">
 
-      <th>Name</th>
-      <th>Project</th>
-      <th>Officer Role</th>
-      <th>Constituency</th>
-      <th>User ID</th>
-      <th>Actions</th>
+  </div>
 
-    </tr>
+  <!-- ================= Table ================= -->
 
-    <tr *ngFor="let officer of filteredOfficers()">
+  <div class="table-card">
 
-      <td>{{ officer.name }}</td>
+    <table>
 
-      <td>{{ getProjectName(officer.projectId) }}</td>
+      <thead>
 
-      <td>{{ officer.officerRole }}</td>
+        <tr>
 
-      <td>{{ officer.constituency }}</td>
+          <th>Name</th>
+          <th>Project</th>
+          <th>Officer Role</th>
+          <th>Constituency</th>
+          <th>User ID</th>
+          <th>Actions</th>
 
-      <td>{{ officer.userId }}</td>
+        </tr>
 
-      <td>
+      </thead>
 
-        <button
-          class="view-btn"
-          (click)="viewOfficer(officer)">
+      <tbody>
 
-          View
+        <tr *ngFor="let officer of filteredOfficers()">
 
-        </button>
+          <td>
 
-        <button
-          class="edit-btn"
-          (click)="editOfficer(officer)">
+            <strong>{{ officer.name }}</strong>
 
-          Edit
+          </td>
 
-        </button>
+          <td>
 
-        <button
-          class="delete-btn"
-          (click)="deleteOfficer(officer.id)">
+            {{ getProjectName(officer.projectId) }}
 
-          Delete
+          </td>
 
-        </button>
+          <td>
 
-      </td>
+            {{ officer.officerRole }}
 
-    </tr>
+          </td>
 
-    <tr *ngIf="filteredOfficers().length === 0">
+          <td>
 
-      <td colspan="6" style="text-align:center; padding:20px;">
+            {{ officer.constituency }}
 
-        No officers found.
+          </td>
 
-      </td>
+          <td>
 
-    </tr>
+            <span class="user-id">
 
-  </table>
+              {{ officer.userId }}
 
-  <!-- Create / Edit Modal -->
+            </span>
+
+          </td>
+
+          <td class="actions">
+
+            <button
+              class="view-btn"
+              (click)="viewOfficer(officer)">
+
+              View
+
+            </button>
+
+            <button
+              class="edit-btn"
+              (click)="editOfficer(officer)">
+
+              Edit
+
+            </button>
+
+            <button
+              class="delete-btn"
+              (click)="deleteOfficer(officer.id)">
+
+              Delete
+
+            </button>
+
+          </td>
+
+        </tr>
+
+        <tr *ngIf="filteredOfficers().length === 0">
+
+          <td
+            colspan="6"
+            class="empty-row">
+
+            No officers found.
+
+          </td>
+
+        </tr>
+
+      </tbody>
+
+    </table>
+
+  </div>
+
+  <!-- ================= Create / Edit Modal ================= -->
 
   <div
     class="modal"
@@ -97,64 +157,85 @@
 
       </h2>
 
-      <label>Officer Name</label>
+      <div class="form-group">
 
-      <input
-        type="text"
-        [(ngModel)]="officerName">
+        <label>Officer Name</label>
 
-      <label>Project</label>
+        <input
+          type="text"
+          [(ngModel)]="officerName">
 
-      <select [(ngModel)]="selectedProject">
+      </div>
 
-        <option value="">
+      <div class="form-group">
 
-          Select Project
+        <label>Project</label>
 
-        </option>
+        <select [(ngModel)]="selectedProject">
 
-        <option
-          *ngFor="let project of projects"
-          [value]="project.id">
+          <option value="">
 
-          {{ project.name }}
+            Select Project
 
-        </option>
+          </option>
 
-      </select>
+          <option
+            *ngFor="let project of projects"
+            [value]="project.id">
 
-      <label>Officer Role</label>
+            {{ project.name }}
 
-      <select [(ngModel)]="selectedOfficerRole">
+          </option>
 
-        <option value="">
+        </select>
 
-          Select Officer Role
+      </div>
 
-        </option>
+      <div class="form-group">
 
-        <option
-          *ngFor="let role of officerRoles"
-          [value]="role">
+        <label>Officer Role</label>
 
-          {{ role }}
+        <select [(ngModel)]="selectedOfficerRole">
 
-        </option>
+          <option value="">
 
-      </select>
+            Select Officer Role
 
-      <label>Assembly Constituency</label>
+          </option>
 
-      <input
-        type="text"
-        [(ngModel)]="constituency">
+          <option
+            *ngFor="let role of officerRoles"
+            [value]="role">
 
-      <label>Address</label>
+            {{ role }}
 
-      <textarea
-        rows="3"
-        [(ngModel)]="address">
-      </textarea>
+          </option>
+
+        </select>
+
+      </div>
+
+      <div class="form-group">
+
+        <label>Assembly Constituency</label>
+
+        <input
+          type="text"
+          [(ngModel)]="constituency">
+
+      </div>
+
+      <div class="form-group">
+
+        <label>Address</label>
+
+        <textarea
+          rows="3"
+          [(ngModel)]="address">
+
+        </textarea>
+
+      </div>
 
       <div class="buttons">
 
@@ -180,7 +261,7 @@
 
   </div>
 
-  <!-- View Officer Modal -->
+  <!-- ================= View Modal ================= -->
 
   <div
     class="modal"
@@ -188,55 +269,83 @@
 
     <div class="modal-content">
 
-      <h2>Officer Details</h2>
+      <h2>
 
-      <p>
+        Officer Details
 
-        <strong>Name:</strong>
+      </h2>
 
-        {{ selectedOfficer?.name }}
+      <div class="details-grid">
 
-      </p>
+        <div>
 
-      <p>
+          <span>Name</span>
 
-        <strong>Project:</strong>
+          <strong>{{ selectedOfficer?.name }}</strong>
 
-        {{ getProjectName(selectedOfficer?.projectId) }}
+        </div>
 
-      </p>
+        <div>
 
-      <p>
+          <span>Project</span>
 
-        <strong>Officer Role:</strong>
+          <strong>
 
-        {{ selectedOfficer?.officerRole }}
+            {{ getProjectName(selectedOfficer?.projectId) }}
 
-      </p>
+          </strong>
 
-      <p>
+        </div>
 
-        <strong>Assembly Constituency:</strong>
+        <div>
 
-        {{ selectedOfficer?.constituency }}
+          <span>Officer Role</span>
 
-      </p>
+          <strong>
 
-      <p>
+            {{ selectedOfficer?.officerRole }}
 
-        <strong>Address:</strong>
+          </strong>
 
-        {{ selectedOfficer?.address }}
+        </div>
 
-      </p>
+        <div>
 
-      <p>
+          <span>Constituency</span>
 
-        <strong>User ID:</strong>
+          <strong>
 
-        {{ selectedOfficer?.userId }}
+            {{ selectedOfficer?.constituency }}
 
-      </p>
+          </strong>
+
+        </div>
+
+        <div>
+
+          <span>Address</span>
+
+          <strong>
+
+            {{ selectedOfficer?.address }}
+
+          </strong>
+
+        </div>
+
+        <div>
+
+          <span>User ID</span>
+
+          <strong>
+
+            {{ selectedOfficer?.userId }}
+
+          </strong>
+
+        </div>
+
+      </div>
 
       <div class="buttons">
 
