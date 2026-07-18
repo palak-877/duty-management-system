@@ -59,6 +59,14 @@ export class AssignDuty implements OnInit {
 
   selectedOfficerId: number | null = null;
 
+  selectedDepartment = '';
+
+selectedOffice = '';
+
+selectedDesignation = '';
+
+searchText = '';
+
   constructor(
   private auth: Auth
 ) {}
@@ -392,7 +400,9 @@ if (recommended.length < Number(staff.count)) {
 
 recommended.forEach(emp => {
 
-  emp.selected = true;
+  emp.selected = false;
+
+  emp.recommended = true;
 
 });
 
@@ -530,4 +540,95 @@ Please contact the administrator.`;
 
 }
 
+
+/* ================= Filters ================= */
+
+getDepartments() {
+
+  return [...new Set(this.employees.map(e => e.department))];
+
 }
+
+getOffices() {
+
+  return [...new Set(this.employees.map(e => e.office))];
+
+}
+
+getDesignations() {
+
+  return [...new Set(this.employees.map(e => e.designation))];
+
+}
+
+filterEmployees(group: any) {
+
+  return group.employees.filter((emp: any) => {
+
+    const departmentMatch =
+      !this.selectedDepartment ||
+      emp.department === this.selectedDepartment;
+
+    const officeMatch =
+      !this.selectedOffice ||
+      emp.office === this.selectedOffice;
+
+    const designationMatch =
+      !this.selectedDesignation ||
+      emp.designation === this.selectedDesignation;
+
+    const searchMatch =
+      !this.searchText ||
+      emp.name.toLowerCase().includes(this.searchText.toLowerCase()) ||
+      emp.employeeCode.toLowerCase().includes(this.searchText.toLowerCase());
+
+    return (
+      departmentMatch &&
+      officeMatch &&
+      designationMatch &&
+      searchMatch
+    );
+
+  });
+
+}
+
+resetFilters() {
+
+  this.selectedDepartment = '';
+
+  this.selectedOffice = '';
+
+  this.selectedDesignation = '';
+
+  this.searchText = '';
+
+}
+
+
+/* ================= Selected Employees Count ================= */
+
+getSelectedCount(): number {
+
+  let count = 0;
+
+  this.eligibleEmployees.forEach(group => {
+
+    group.employees.forEach((emp: any) => {
+
+      if (emp.selected) {
+
+        count++;
+
+      }
+
+    });
+
+  });
+
+  return count;
+
+}
+
+}
+
