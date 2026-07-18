@@ -289,3 +289,17 @@ table{
 }
 
 }
+
+/* ================= Recommended Employees ================= */
+
+.recommended-row {
+
+    background: #e8f4ff !important;
+
+}
+
+.recommended-row:hover {
+
+    background: #d7ebff !important;
+
+}

@@ -410,112 +410,188 @@
                 <tr>
 
                     <th>Status</th>
-
-                    <th>Employee Code</th>
-
-                    <th>Name</th>
-
-                    <th>Department</th>
-
-                    <th>Designation</th>
-
-                    <th>Phone</th>
-
-                    <th>Constituency</th>
-
-                    <th>Select</th>
+<th>Recommended</th>
+<th>Employee Code</th>
+<th>Name</th>
+<th>Department</th>
+<th>Designation</th>
+<th>Batch No.</th>
+<th>Phone</th>
+<th>Constituency</th>
+<th>Reason (If Rejected)</th>
+<th>Select</th>
 
                 </tr>
 
             </thead>
 
-            <tbody>
+          <tbody>
 
-                <ng-container
-                    *ngFor="let group of eligibleEmployees">
+    <ng-container *ngFor="let group of eligibleEmployees">
 
-                    <tr class="group-row">
+        <!-- Group Heading -->
 
-                        <td
-                            colspan="8">
+        <tr class="group-row">
 
-                            <strong>
+            <td colspan="11">
 
-                                {{ group.dutyRole }}
+                <strong>
 
-                            </strong>
+                    {{ group.dutyRole }}
 
-                            (Required : {{ group.required }})
+                </strong>
 
-                        </td>
+                (Required : {{ group.required }})
 
-                    </tr>
+            </td>
 
-                   <tr
-    *ngFor="let emp of filterEmployees(group)">
-                        <td>
+        </tr>
 
-                            <span
-                                class="status"
-                                [class.available]="!emp.isAssigned"
-                                [class.assigned]="emp.isAssigned">
+        <!-- Employees -->
 
-                                {{ emp.isAssigned ? 'Assigned' : 'Available' }}
+        <tr
+            *ngFor="let emp of filterEmployees(group)"
+            [class.recommended-row]="emp.recommended">
 
-                            </span>
+            <!-- Status -->
 
-                        </td>
+            <td>
 
-                        <td>
+                <span
+                    class="status"
+                    [class.available]="!emp.isAssigned"
+                    [class.assigned]="emp.isAssigned">
 
-                            {{ emp.employeeCode }}
+                    {{ emp.isAssigned ? 'Assigned' : 'Available' }}
 
-                        </td>
+                </span>
 
-                        <td>
+            </td>
 
-                            {{ emp.name }}
+            <!-- Recommended -->
 
-                        </td>
+            <td>
 
-                        <td>
+                <span
+                    *ngIf="emp.recommended"
+                    class="recommended-badge">
 
-                            {{ emp.department }}
+                    Recommended
 
-                        </td>
+                </span>
 
-                        <td>
+                <span *ngIf="!emp.recommended">
 
-                            {{ emp.designation }}
+                    -
 
-                        </td>
+                </span>
 
-                        <td>
+            </td>
 
-                            {{ emp.phone }}
+            <!-- Employee Code -->
 
-                        </td>
+            <td>
 
-                        <td>
+                {{ emp.employeeCode }}
 
-                            {{ emp.constituency }}
+            </td>
 
-                        </td>
+            <!-- Name -->
 
-                        <td>
+            <td>
 
-                            <input
-                                type="checkbox"
-                                [(ngModel)]="emp.selected">
+                {{ emp.name }}
 
-                        </td>
+            </td>
 
-                    </tr>
+            <!-- Department -->
 
-                </ng-container>
+            <td>
 
-            </tbody>
+                {{ emp.department }}
 
+            </td>
+
+            <!-- Designation -->
+
+            <td>
+
+                {{ emp.designation }}
+
+            </td>
+
+            <!-- Batch -->
+
+            <td>
+
+                {{ emp.batchNumber || '-' }}
+
+            </td>
+
+            <!-- Phone -->
+
+            <td>
+
+                {{ emp.phone }}
+
+            </td>
+
+            <!-- Constituency -->
+
+            <td>
+
+                {{ emp.constituency }}
+
+            </td>
+
+            <!-- Reject Reason -->
+
+            <td>
+
+                <select
+                    [(ngModel)]="emp.rejectReason"
+                    [disabled]="emp.selected">
+
+                    <option value="">
+
+                        --
+
+                    </option>
+
+                    <option
+                        *ngFor="let reason of rejectionReasons"
+                        [value]="reason">
+
+                        {{ reason }}
+
+                    </option>
+
+                </select>
+
+                <input
+                    *ngIf="emp.rejectReason==='Other'"
+                    type="text"
+                    [(ngModel)]="emp.otherReason"
+                    placeholder="Enter reason">
+
+            </td>
+
+            <!-- Select -->
+
+            <td>
+
+                <input
+                    type="checkbox"
+                    [(ngModel)]="emp.selected"
+                    (change)="toggleEmployeeSelection()">
+
+            </td>
+
+        </tr>
+
+    </ng-container>
+
+</tbody>
         </table>
 
     </div>
