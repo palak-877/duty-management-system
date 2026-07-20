@@ -124,78 +124,107 @@
 
     <!-- ================= Required Staff ================= -->
 
-    <div
-        class="card"
-        *ngIf="requiredStaff.length > 0">
+    <!-- ================= Required Staff ================= -->
 
-        <div class="card-title">
+<div
+    class="card"
+    *ngIf="requiredStaff.length > 0">
 
-            Required Staff
+    <div class="card-title">
 
-        </div>
-
-        <table>
-
-            <thead>
-
-                <tr>
-
-                    <th>
-
-                        Designation
-
-                    </th>
-
-                    <th class="required-column">
-
-                        Required Employees
-
-                    </th>
-
-                </tr>
-
-            </thead>
-
-            <tbody>
-
-                <tr
-                    *ngFor="let staff of requiredStaff">
-
-                    <td>
-
-                        {{ staff.dutyRole }}
-
-                    </td>
-
-                    <td>
-
-                        <input
-                            class="count-input"
-                            type="number"
-                            min="0"
-                            [(ngModel)]="staff.count">
-
-                    </td>
-
-                </tr>
-
-            </tbody>
-
-        </table>
-
-        <div class="button-row">
-
-            <button
-                class="primary-btn"
-                (click)="generateEmployees()">
-
-                Generate Employees
-
-            </button>
-
-        </div>
+        Duty Requirement
 
     </div>
+
+    <!-- Before generation -->
+
+    <table *ngIf="currentEmployees.length === 0">
+
+        <thead>
+
+            <tr>
+
+                <th>Designation</th>
+
+                <th class="required-column">
+                    Required Employees
+                </th>
+
+            </tr>
+
+        </thead>
+
+        <tbody>
+
+            <tr *ngFor="let staff of requiredStaff">
+
+                <td>
+
+                    {{ staff.dutyRole }}
+
+                </td>
+
+                <td>
+
+                    <input
+                        class="count-input"
+                        type="number"
+                        min="0"
+                        [(ngModel)]="staff.count">
+
+                </td>
+
+            </tr>
+
+        </tbody>
+
+    </table>
+
+    <!-- After generation -->
+
+    <div
+        class="current-role-box"
+        *ngIf="currentEmployees.length > 0">
+
+        <h3>
+
+            Assigning
+            <span class="highlight-role">
+
+                {{ requiredStaff[currentRoleIndex].dutyRole }}
+
+            </span>
+
+        </h3>
+
+        <p>
+
+            Required Employees :
+            <strong>
+
+                {{ requiredStaff[currentRoleIndex].count }}
+
+            </strong>
+
+        </p>
+
+    </div>
+
+    <div
+        class="button-row"
+        *ngIf="currentEmployees.length === 0">
+
+        <button
+            class="primary-btn"
+            (click)="generateEmployees()">
+
+            Generate Employees
+
+        </button>
+
+    </div>
+
+</div>
 
     <!-- ================= Warning ================= -->
 
@@ -211,7 +240,7 @@
 
 <div
     class="card"
-    *ngIf="eligibleEmployees.length > 0">
+    *ngIf="currentEmployees.length > 0">
 
     <div class="card-title">
         Employee Filters
@@ -355,7 +384,7 @@
 
     <div
         class="card"
-        *ngIf="eligibleEmployees.length > 0">
+        *ngIf="currentEmployees.length > 0">
 
         <div class="table-header">
 
@@ -363,15 +392,20 @@
 
                 <h3>
 
-                    Staff Records For Allocation
+    Assigning {{ requiredStaff[currentRoleIndex].dutyRole }}
 
-                </h3>
+</h3>
 
-                <p>
+<p>
 
-                    Select employees to assign duty.
+    Required Employees :
+    <strong>
 
-                </p>
+        {{ requiredStaff[currentRoleIndex].count }}
+
+    </strong>
+
+</p>
 
             </div>
 
@@ -392,12 +426,26 @@
                 </h2>
 
                 <button
-                    class="primary-btn"
-                    (click)="assignDuties()">
+    *ngIf="!joiningStage"
+    class="primary-btn"
+    (click)="assignDuties()">
 
-                    Assign Selected
+    {{
+      currentRoleIndex === requiredStaff.length - 1
+      ? 'Finish Assignment'
+      : 'Assign ' + requiredStaff[currentRoleIndex].dutyRole
+    }}
 
-                </button>
+</button>
+
+<button
+    *ngIf="joiningStage"
+    class="primary-btn"
+    (click)="saveJoiningStatus()">
+
+    Save Joining Status
+
+</button>
 
             </div>
 
@@ -409,7 +457,7 @@
 
                 <tr>
 
-                    <th>Status</th>
+<th>Status</th>
 <th>Recommended</th>
 <th>Employee Code</th>
 <th>Name</th>
@@ -418,8 +466,10 @@
 <th>Batch No.</th>
 <th>Phone</th>
 <th>Constituency</th>
-<th>Reason (If Rejected)</th>
-<th>Select</th>
+<th *ngIf="!joiningStage">Select</th>
+<th *ngIf="joiningStage">Joined</th>
+<th *ngIf="joiningStage">Reason (If Not Joined)</th>
+
 
                 </tr>
 
@@ -427,26 +477,25 @@
 
           <tbody>
 
-    <ng-container *ngFor="let group of eligibleEmployees">
+    <ng-container *ngFor="let group of (joiningStage ? joiningEmployees : currentEmployees)">
 
         <!-- Group Heading -->
 
         <tr class="group-row">
 
-            <td colspan="11">
+    <td colspan="11">
 
-                <strong>
+        <strong>
 
-                    {{ group.dutyRole }}
+            Assigning {{ joiningStage ? 'Joining Status' : 'Assigning ' + group.dutyRole }}
 
-                </strong>
+        </strong>
 
-                (Required : {{ group.required }})
+        (Required : {{ group.required }})
 
-            </td>
+    </td>
 
-        </tr>
-
+</tr>
         <!-- Employees -->
 
         <tr
@@ -544,48 +593,74 @@
 
             </td>
 
+             <!-- Select -->
+
+         <td *ngIf="!joiningStage">
+
+    <input
+        type="checkbox"
+        [(ngModel)]="emp.selected"
+        (change)="toggleEmployeeSelection(emp)"
+        [disabled]="
+            emp.isAssigned ||
+            (
+                !emp.selected &&
+                getSelectedCount() >= requiredStaff[currentRoleIndex].count
+            )">
+
+</td>
+
+<!-- joined -->
+
+<td *ngIf="joiningStage">
+
+    <input
+        type="checkbox"
+        [(ngModel)]="emp.joined">
+
+</td>
+
             <!-- Reject Reason -->
 
-            <td>
+           <td *ngIf="joiningStage">
 
-                <select
-                    [(ngModel)]="emp.rejectReason"
-                    [disabled]="emp.selected">
+    <ng-container *ngIf="!emp.joined">
 
-                    <option value="">
+        <select [(ngModel)]="emp.joinReason">
 
-                        --
+            <option value="">
+                Select Reason
+            </option>
 
-                    </option>
+            <option
+                *ngFor="let reason of rejectionReasons"
+                [value]="reason">
 
-                    <option
-                        *ngFor="let reason of rejectionReasons"
-                        [value]="reason">
+                {{ reason }}
 
-                        {{ reason }}
+            </option>
 
-                    </option>
+        </select>
 
-                </select>
+        <input
+            *ngIf="emp.joinReason === 'Other'"
+            type="text"
+            [(ngModel)]="emp.otherReason"
+            placeholder="Enter reason">
 
-                <input
-                    *ngIf="emp.rejectReason==='Other'"
-                    type="text"
-                    [(ngModel)]="emp.otherReason"
-                    placeholder="Enter reason">
+    </ng-container>
 
-            </td>
+    <span *ngIf="emp.joined">
 
-            <!-- Select -->
+        Joined Duty
 
-            <td>
+    </span>
 
-                <input
-                    type="checkbox"
-                    [(ngModel)]="emp.selected"
-                    (change)="toggleEmployeeSelection()">
+</td>
 
-            </td>
+           
+
+
 
         </tr>
 
