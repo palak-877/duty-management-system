@@ -10,6 +10,7 @@ import { MainLayout } from './core/layout/main-layout/main-layout';
 import { Projects } from './features/masters/projects/projects';
 import { Designations } from './features/masters/designations/designations';
 import { authGuard } from './core/guards/auth-guard';
+import { BatchHistory } from './features/reports/batch-history/batch-history';
 
 export const routes: Routes = [
 
@@ -77,7 +78,13 @@ export const routes: Routes = [
         path: 'reports',
         component: Reports,
         canActivate: [authGuard]
-      }
+      },
+
+      {
+  path: 'batch-history',
+  component: BatchHistory,
+  canActivate: [authGuard]
+}
 
     ]
   },

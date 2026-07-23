@@ -1,0 +1,129 @@
+<div class="page-header">
+
+    <h2>Batch History</h2>
+
+    <p>Previously generated duty batches.</p>
+
+</div>
+
+<div
+    class="card"
+    *ngIf="batchHistory.batches.length > 0">
+
+    <table>
+
+        <thead>
+
+            <tr>
+
+                <th>Lot No.</th>
+                <th>Project</th>
+                <th>Officer</th>
+                <th>Date</th>
+                <th>Employees</th>
+
+            </tr>
+
+        </thead>
+
+        <tbody>
+
+    <ng-container *ngFor="let batch of batchHistory.batches">
+
+        <tr
+            (click)="toggleBatch(batch)"
+            style="cursor:pointer;">
+
+            <td>{{ batch.lotNumber }}</td>
+
+            <td>{{ batch.project }}</td>
+
+            <td>{{ batch.officer }}</td>
+
+            <td>{{ batch.date | date:'dd-MM-yyyy HH:mm' }}</td>
+
+            <td>{{ batch.employees.length }}</td>
+
+        </tr>
+
+        <tr *ngIf="expandedBatch === batch">
+
+            <td colspan="5">
+
+                <table class="inner-table">
+
+                    <thead>
+
+                        <tr>
+
+                            <th>Employee</th>
+
+                            <th>Duty Role</th>
+
+                            <th>Joined</th>
+
+                            <th>Non Joining Reason</th>
+
+                        </tr>
+
+                    </thead>
+
+                    <tbody>
+
+                        <tr *ngFor="let assignment of batch.employees">
+
+                            <td>{{ assignment.employee.name }}</td>
+
+                            <td>{{ assignment.dutyRole }}</td>
+
+                            <td>
+
+                                {{ assignment.employee.joined ? 'Yes' : 'No' }}
+
+                            </td>
+
+                            <td>
+
+    <ng-container *ngIf="assignment.employee.joined">
+
+        -
+
+    </ng-container>
+
+    <ng-container *ngIf="!assignment.employee.joined">
+
+        {{
+            assignment.employee.joinReason === 'Other'
+            ? assignment.employee.otherReason
+            : assignment.employee.joinReason || '-'
+        }}
+
+    </ng-container>
+
+</td>
+
+                        </tr>
+
+                    </tbody>
+
+                </table>
+
+            </td>
+
+        </tr>
+
+    </ng-container>
+
+</tbody>
+
+    </table>
+
+</div>
+
+<div
+    class="card"
+    *ngIf="batchHistory.batches.length === 0">
+
+    <p>No batches generated yet.</p>
+
+</div>

@@ -356,22 +356,23 @@
         <div class="button-group">
 
             <button
-                class="primary-btn">
+    class="primary-btn"
+    (click)="currentEmployees.forEach(group => filterEmployees(group))">
 
-                Search
+    Search
 
-            </button>
+</button>
+
+<button
+    class="secondary-btn"
+    (click)="resetFilters()">
+
+    Reset
+
+</button>
 
 
-            <button
-
-                class="secondary-btn"
-
-                (click)="resetFilters()">
-
-                Reset
-
-            </button>
+            
 
         </div>
 
@@ -468,7 +469,7 @@
 <th>Constituency</th>
 <th *ngIf="!joiningStage">Select</th>
 <th *ngIf="joiningStage">Joined</th>
-<th *ngIf="joiningStage">Reason (If Not Joined)</th>
+<th *ngIf="joiningStage">Non Joining Reason</th>
 
 
                 </tr>
@@ -499,7 +500,7 @@
         <!-- Employees -->
 
         <tr
-            *ngFor="let emp of filterEmployees(group)"
+            *ngFor="let emp of group.filteredEmployees"
             [class.recommended-row]="emp.recommended">
 
             <!-- Status -->
@@ -629,8 +630,8 @@
         <select [(ngModel)]="emp.joinReason">
 
             <option value="">
-                Select Reason
-            </option>
+    Select Non Joining Reason
+</option>
 
             <option
                 *ngFor="let reason of rejectionReasons"

@@ -1,0 +1,49 @@
+.page-header{
+    margin-bottom:20px;
+}
+
+.card{
+    background:#fff;
+    padding:20px;
+    border-radius:10px;
+}
+
+table{
+    width:100%;
+    border-collapse:collapse;
+}
+
+th,
+td{
+    padding:12px;
+    border-bottom:1px solid #ddd;
+    text-align:left;
+}
+
+th{
+    background:#f5f5f5;
+}
+.inner-table{
+
+    width:100%;
+
+    margin-top:10px;
+
+    border-collapse:collapse;
+
+}
+
+.inner-table th,
+.inner-table td{
+
+    padding:10px;
+
+    border:1px solid #ddd;
+
+}
+
+tbody tr:hover{
+
+    background:#f8f9fa;
+
+}

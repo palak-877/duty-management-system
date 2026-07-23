@@ -118,53 +118,62 @@
 
     </div>
 
-    <!-- ================= Reports ================= -->
+   <!-- ================= Reports ================= -->
 
-    <div
-        class="menu-heading"
-        (click)="toggleReports()">
+<div
+    class="menu-heading"
+    (click)="toggleReports()">
 
-        <span>Reports</span>
+    <span>Reports</span>
 
-        <span>
+    <span>
 
-            {{ showReports ? '▼' : '▶' }}
+        {{ showReports ? '▼' : '▶' }}
 
-        </span>
+    </span>
 
-    </div>
+</div>
 
-    <div
-        class="submenu"
-        *ngIf="showReports">
+<div
+    class="submenu"
+    *ngIf="showReports">
 
-        <a
-            routerLink="/reports"
-            routerLinkActive="active"
-            class="submenu-item">
+    <a
+        routerLink="/reports"
+        routerLinkActive="active"
+        class="submenu-item">
 
-            Project Report
+        Project Report
 
-        </a>
+    </a>
 
-        <a
-            routerLink="/reports"
-            routerLinkActive="active"
-            class="submenu-item">
+    <a
+        routerLink="/reports"
+        routerLinkActive="active"
+        class="submenu-item">
 
-            Employee Report
+        Employee Report
 
-        </a>
+    </a>
 
-        <a
-            routerLink="/reports"
-            routerLinkActive="active"
-            class="submenu-item">
+    <a
+        routerLink="/reports"
+        routerLinkActive="active"
+        class="submenu-item">
 
-            Designation Report
+        Designation Report
 
-        </a>
+    </a>
 
-    </div>
+    <a
+        routerLink="/batch-history"
+        routerLinkActive="active"
+        class="submenu-item">
+
+        Batch History
+
+    </a>
+
+</div>
 
 </nav>

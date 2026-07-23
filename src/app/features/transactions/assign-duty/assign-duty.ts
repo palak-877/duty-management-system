@@ -10,7 +10,7 @@ import { designationData } from '../../../core/services/designation-data';
 import { employeeData } from '../../../core/services/employee-data';
 import { dutyEligibilityData } from '../../../core/services/duty-eligibility-data';
 import { Auth } from '../../../core/services/auth';
-
+import { batchHistoryData } from '../../../core/services/batch-history-data';
 @Component({
   selector: 'app-assign-duty',
   standalone: true,
@@ -60,6 +60,9 @@ finalAssignments: any[] = [];
 
 joiningStage = false;
 joiningEmployees: any[] = [];
+
+batchHistory = batchHistoryData;
+filteredEmployees: any[] = [];
 
   // ==========================
   // Filters
@@ -285,6 +288,10 @@ generateManualEmployees(): void {
 
   this.requiredStaff.forEach((staff: any, index: number) => {
 
+    if (index !== this.currentRoleIndex) {
+      return;
+    }
+
     const rule = this.eligibilityRules.find(
       (r: any) =>
         r.projectId === Number(this.selectedProject) &&
@@ -295,16 +302,24 @@ generateManualEmployees(): void {
       return;
     }
 
-    // Show only the current role
-    if (index !== this.currentRoleIndex) {
-      return;
-    }
-
     const eligibleEmployees = this.employees.filter((emp: any) =>
 
       rule.eligibleDesignations.includes(emp.designation) &&
       !emp.isAssigned &&
-      !this.allocatedEmployeeIds.includes(emp.id)
+      !this.allocatedEmployeeIds.includes(emp.id) &&
+
+      (!this.selectedDepartment ||
+        emp.department === this.selectedDepartment) &&
+
+      (!this.selectedOffice ||
+        emp.office === this.selectedOffice) &&
+
+      (!this.selectedDesignation ||
+        emp.designation === this.selectedDesignation) &&
+
+      (!this.searchText ||
+        emp.name.toLowerCase().includes(this.searchText.toLowerCase()) ||
+        emp.employeeCode.toLowerCase().includes(this.searchText.toLowerCase()))
 
     );
 
@@ -318,7 +333,20 @@ generateManualEmployees(): void {
 
     const allEmployees = this.employees.filter((emp: any) =>
 
-      !this.allocatedEmployeeIds.includes(emp.id)
+      !this.allocatedEmployeeIds.includes(emp.id) &&
+
+      (!this.selectedDepartment ||
+        emp.department === this.selectedDepartment) &&
+
+      (!this.selectedOffice ||
+        emp.office === this.selectedOffice) &&
+
+      (!this.selectedDesignation ||
+        emp.designation === this.selectedDesignation) &&
+
+      (!this.searchText ||
+        emp.name.toLowerCase().includes(this.searchText.toLowerCase()) ||
+        emp.employeeCode.toLowerCase().includes(this.searchText.toLowerCase()))
 
     );
 
@@ -331,13 +359,17 @@ generateManualEmployees(): void {
 
     });
 
+    const employeeList = [...allEmployees];
+
     this.currentEmployees.push({
 
       dutyRole: staff.dutyRole,
 
       required: staff.count,
 
-      employees: allEmployees
+      employees: employeeList,
+
+      filteredEmployees: [...employeeList]
 
     });
 
@@ -356,7 +388,6 @@ generateManualEmployees(): void {
   }
 
 }
-
     // ==========================
   // Recommended Assignment
   // ==========================
@@ -375,6 +406,10 @@ generateRecommendedEmployees(): void {
 
   this.requiredStaff.forEach((staff: any, index: number) => {
 
+    if (index !== this.currentRoleIndex) {
+      return;
+    }
+
     const rule = this.eligibilityRules.find(
       (r: any) =>
         r.projectId === Number(this.selectedProject) &&
@@ -385,17 +420,25 @@ generateRecommendedEmployees(): void {
       return;
     }
 
-    // Show only current duty role
-    if (index !== this.currentRoleIndex) {
-      return;
-    }
-
     const eligibleEmployees = this.employees.filter((emp: any) =>
 
       rule.eligibleDesignations.includes(emp.designation) &&
       emp.constituency === this.selectedOfficer.constituency &&
       !emp.isAssigned &&
-      !this.allocatedEmployeeIds.includes(emp.id)
+      !this.allocatedEmployeeIds.includes(emp.id) &&
+
+      (!this.selectedDepartment ||
+        emp.department === this.selectedDepartment) &&
+
+      (!this.selectedOffice ||
+        emp.office === this.selectedOffice) &&
+
+      (!this.selectedDesignation ||
+        emp.designation === this.selectedDesignation) &&
+
+      (!this.searchText ||
+        emp.name.toLowerCase().includes(this.searchText.toLowerCase()) ||
+        emp.employeeCode.toLowerCase().includes(this.searchText.toLowerCase()))
 
     );
 
@@ -414,8 +457,23 @@ generateRecommendedEmployees(): void {
 
     }
 
-    const allEmployees = this.employees.filter(
-      (emp: any) => !this.allocatedEmployeeIds.includes(emp.id)
+    const allEmployees = this.employees.filter((emp: any) =>
+
+      !this.allocatedEmployeeIds.includes(emp.id) &&
+
+      (!this.selectedDepartment ||
+        emp.department === this.selectedDepartment) &&
+
+      (!this.selectedOffice ||
+        emp.office === this.selectedOffice) &&
+
+      (!this.selectedDesignation ||
+        emp.designation === this.selectedDesignation) &&
+
+      (!this.searchText ||
+        emp.name.toLowerCase().includes(this.searchText.toLowerCase()) ||
+        emp.employeeCode.toLowerCase().includes(this.searchText.toLowerCase()))
+
     );
 
     allEmployees.forEach((emp: any) => {
@@ -437,16 +495,20 @@ generateRecommendedEmployees(): void {
       (emp: any) => !recommendedEmployees.includes(emp)
     );
 
+    const employeeList = [
+      ...recommendedEmployees,
+      ...remainingEmployees
+    ];
+
     this.currentEmployees.push({
 
       dutyRole: staff.dutyRole,
 
       required: staff.count,
 
-      employees: [
-        ...recommendedEmployees,
-        ...remainingEmployees
-      ]
+      employees: employeeList,
+
+      filteredEmployees: [...employeeList]
 
     });
 
@@ -663,48 +725,52 @@ Please contact the administrator.`;
 
   }
 
-  filterEmployees(group: any) {
+  filterEmployees(group: any): void {
 
-    return group.employees.filter((emp: any) => {
+  group.filteredEmployees = group.employees.filter((emp: any) => {
 
-      const departmentMatch =
-        !this.selectedDepartment ||
-        emp.department === this.selectedDepartment;
+    const departmentMatch =
+      !this.selectedDepartment ||
+      emp.department === this.selectedDepartment;
 
-      const officeMatch =
-        !this.selectedOffice ||
-        emp.office === this.selectedOffice;
+    const officeMatch =
+      !this.selectedOffice ||
+      emp.office === this.selectedOffice;
 
-      const designationMatch =
-        !this.selectedDesignation ||
-        emp.designation === this.selectedDesignation;
+    const designationMatch =
+      !this.selectedDesignation ||
+      emp.designation === this.selectedDesignation;
 
-      const searchMatch =
-        !this.searchText ||
-        emp.name.toLowerCase().includes(this.searchText.toLowerCase()) ||
-        emp.employeeCode.toLowerCase().includes(this.searchText.toLowerCase());
+    const searchMatch =
+      !this.searchText ||
+      emp.name.toLowerCase().includes(this.searchText.toLowerCase()) ||
+      emp.employeeCode.toLowerCase().includes(this.searchText.toLowerCase());
 
-      return (
+    return (
+      departmentMatch &&
+      officeMatch &&
+      designationMatch &&
+      searchMatch
+    );
 
-        departmentMatch &&
-        officeMatch &&
-        designationMatch &&
-        searchMatch
+  });
 
-      );
-
-    });
-
-  }
+}
 
   resetFilters(): void {
 
-    this.selectedDepartment = '';
-    this.selectedOffice = '';
-    this.selectedDesignation = '';
-    this.searchText = '';
+  this.selectedDepartment = '';
+  this.selectedOffice = '';
+  this.selectedDesignation = '';
+  this.searchText = '';
 
-  }
+  this.currentEmployees.forEach((group: any) => {
+
+    group.filteredEmployees = [...group.employees];
+
+  });
+
+}
 
     // ==========================
   // Select All
@@ -844,13 +910,21 @@ Please contact the administrator.`;
 
   }
 
-  this.generatedLots.push({
+  this.batchHistory.batches.push({
 
-    lotNumber: this.currentLot,
+  lotNumber: this.currentLot,
 
-    employees: JSON.parse(JSON.stringify(this.finalAssignments))
+  project: this.getProjectName(this.selectedProject),
 
-  });
+  officer: this.selectedOfficer?.name ?? this.loggedInUser?.name,
+
+  date: new Date(),
+
+  employees: JSON.parse(
+    JSON.stringify(this.finalAssignments)
+  )
+
+});
 
   this.currentLot++;
 
