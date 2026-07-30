@@ -636,17 +636,21 @@ this.finalAssignments.forEach((assignment: any) => {
 
 });
 
+const employeeList = this.finalAssignments.map(
+  (a: any) => a.employee
+);
+
 this.joiningEmployees = [
 
   {
 
     dutyRole: 'Assigned Employees',
 
-    required: this.finalAssignments.length,
+    required: employeeList.length,
 
-    employees: this.finalAssignments.map(
-      (a: any) => a.employee
-    )
+    employees: employeeList,
+
+    filteredEmployees: [...employeeList]
 
   }
 
@@ -965,6 +969,16 @@ Please contact the administrator.`;
     this.loadLoggedInOfficer();
 
   }
+
+}
+
+searchEmployees(): void {
+
+  this.currentEmployees.forEach((group: any) => {
+
+    this.filterEmployees(group);
+
+  });
 
 }
 
