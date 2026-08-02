@@ -427,7 +427,6 @@
                 </h2>
 
                 <button
-    *ngIf="!joiningStage"
     class="primary-btn"
     (click)="assignDuties()">
 
@@ -439,14 +438,7 @@
 
 </button>
 
-<button
-    *ngIf="joiningStage"
-    class="primary-btn"
-    (click)="saveJoiningStatus()">
 
-    Save Joining Status
-
-</button>
 
             </div>
 
@@ -467,9 +459,7 @@
 <th>Batch No.</th>
 <th>Phone</th>
 <th>Constituency</th>
-<th *ngIf="!joiningStage">Select</th>
-<th *ngIf="joiningStage">Joined</th>
-<th *ngIf="joiningStage">Non Joining Reason</th>
+<th>Select</th>
 
 
                 </tr>
@@ -478,7 +468,7 @@
 
           <tbody>
 
-    <ng-container *ngFor="let group of (joiningStage ? joiningEmployees : currentEmployees)">
+   <ng-container *ngFor="let group of currentEmployees">
 
         <!-- Group Heading -->
 
@@ -488,7 +478,7 @@
 
         <strong>
 
-            Assigning {{ joiningStage ? 'Joining Status' : 'Assigning ' + group.dutyRole }}
+            Assigning {{ group.dutyRole }}
 
         </strong>
 
@@ -508,13 +498,19 @@
             <td>
 
                 <span
-                    class="status"
-                    [class.available]="!emp.isAssigned"
-                    [class.assigned]="emp.isAssigned">
+    class="status"
+    [class.available]="
+      emp.status === 'Available' ||
+      emp.status === 'Unassigned'
+    "
+    [class.assigned]="
+      emp.status === 'Assigned' ||
+      emp.status === 'Pending'
+    ">
 
-                    {{ emp.isAssigned ? 'Assigned' : 'Available' }}
+    {{ emp.status }}
 
-                </span>
+</span>
 
             </td>
 
@@ -596,68 +592,25 @@
 
              <!-- Select -->
 
-         <td *ngIf="!joiningStage">
+         <td >
 
     <input
         type="checkbox"
         [(ngModel)]="emp.selected"
         (change)="toggleEmployeeSelection(emp)"
         [disabled]="
-            emp.isAssigned ||
-            (
-                !emp.selected &&
-                getSelectedCount() >= requiredStaff[currentRoleIndex].count
-            )">
+    (
+      emp.status === 'Assigned' ||
+      emp.status === 'Pending'
+    ) ||
+    (
+      !emp.selected &&
+      getSelectedCount() >= requiredStaff[currentRoleIndex].count
+    )">
 
 </td>
 
-<!-- joined -->
 
-<td *ngIf="joiningStage">
-
-    <input
-        type="checkbox"
-        [(ngModel)]="emp.joined">
-
-</td>
-
-            <!-- Reject Reason -->
-
-           <td *ngIf="joiningStage">
-
-    <ng-container *ngIf="!emp.joined">
-
-        <select [(ngModel)]="emp.joinReason">
-
-            <option value="">
-    Select Non Joining Reason
-</option>
-
-            <option
-                *ngFor="let reason of rejectionReasons"
-                [value]="reason">
-
-                {{ reason }}
-
-            </option>
-
-        </select>
-
-        <input
-            *ngIf="emp.joinReason === 'Other'"
-            type="text"
-            [(ngModel)]="emp.otherReason"
-            placeholder="Enter reason">
-
-    </ng-container>
-
-    <span *ngIf="emp.joined">
-
-        Joined Duty
-
-    </span>
-
-</td>
 
            
 

@@ -34,7 +34,7 @@
 
             <h2>
 
-                {{ filteredEmployees().filter(e => !e.isAssigned).length }}
+                {{ filteredEmployees().filter(e => e.status === 'Available' || e.status === 'Unassigned').length }}
 
             </h2>
 
@@ -46,7 +46,7 @@
 
             <h2>
 
-                {{ filteredEmployees().filter(e => e.isAssigned).length }}
+                {{ filteredEmployees().filter(e => e.status === 'Assigned' || e.status === 'Pending').length }}
 
             </h2>
 
@@ -122,13 +122,13 @@
                     <td>
 
                         <span
-                            class="status-badge"
-                            [class.available-badge]="!employee.isAssigned"
-                            [class.assigned-badge]="employee.isAssigned">
+    class="status-badge"
+    [class.available-badge]="employee.status === 'Available' || employee.status === 'Unassigned'"
+    [class.assigned-badge]="employee.status === 'Assigned' || employee.status === 'Pending'">
 
-                            {{ employee.isAssigned ? 'Assigned' : 'Available' }}
+    {{ employee.status }}
 
-                        </span>
+</span>
 
                     </td>
 

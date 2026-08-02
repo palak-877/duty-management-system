@@ -13,10 +13,10 @@ export const employeeData = {
       phone: '9876543210',
       email: 'rahul@gmail.com',
       isAssigned: false,
+      status: 'Available',
       selected: false,
       joined: false,
-joinReason: ''
-
+      joinReason: ''
     },
 
     {
@@ -30,10 +30,10 @@ joinReason: ''
       phone: '9876543211',
       email: 'ravi@gmail.com',
       isAssigned: false,
+      status: 'Available',
       selected: false,
       joined: false,
-joinReason: ''
-
+      joinReason: ''
     },
 
     {
@@ -47,10 +47,10 @@ joinReason: ''
       phone: '9876543212',
       email: 'pooja@gmail.com',
       isAssigned: false,
+      status: 'Available',
       selected: false,
       joined: false,
-joinReason: ''
-
+      joinReason: ''
     },
 
     {
@@ -64,10 +64,10 @@ joinReason: ''
       phone: '9876543213',
       email: 'aman@gmail.com',
       isAssigned: false,
+      status: 'Available',
       selected: false,
       joined: false,
-joinReason: ''
-
+      joinReason: ''
     },
 
     {
@@ -81,10 +81,10 @@ joinReason: ''
       phone: '9876543214',
       email: 'neha@gmail.com',
       isAssigned: false,
+      status: 'Available',
       selected: false,
       joined: false,
-joinReason: ''
-
+      joinReason: ''
     },
 
     {
@@ -98,10 +98,10 @@ joinReason: ''
       phone: '9876543215',
       email: 'karan@gmail.com',
       isAssigned: false,
+      status: 'Available',
       selected: false,
       joined: false,
-joinReason: ''
-
+      joinReason: ''
     },
 
     {
@@ -115,10 +115,10 @@ joinReason: ''
       phone: '9876543216',
       email: 'simran@gmail.com',
       isAssigned: false,
+      status: 'Available',
       selected: false,
       joined: false,
-joinReason: ''
-
+      joinReason: ''
     },
 
     {
@@ -132,10 +132,10 @@ joinReason: ''
       phone: '9876543217',
       email: 'deepak@gmail.com',
       isAssigned: false,
+      status: 'Available',
       selected: false,
       joined: false,
-joinReason: ''
-
+      joinReason: ''
     },
 
     {
@@ -149,10 +149,10 @@ joinReason: ''
       phone: '9876543218',
       email: 'anjali@gmail.com',
       isAssigned: false,
+      status: 'Available',
       selected: false,
       joined: false,
-joinReason: ''
-
+      joinReason: ''
     },
 
     {
@@ -166,10 +166,10 @@ joinReason: ''
       phone: '9876543219',
       email: 'vikas@gmail.com',
       isAssigned: false,
+      status: 'Available',
       selected: false,
       joined: false,
-joinReason: ''
-
+      joinReason: ''
     }
 
   ]

@@ -1,0 +1,122 @@
+<p>joining-status works!</p>
+<div class="page-header">
+
+    <h2>Joining Status</h2>
+
+    <p>Update joining status of assigned employees.</p>
+
+</div>
+
+<div
+    class="card"
+    *ngFor="let batch of batchHistory.batches">
+
+    <h3>
+
+        Lot {{ batch.lotNumber }}
+
+        |
+
+        {{ batch.project }}
+
+        |
+
+        {{ batch.officer }}
+
+    </h3>
+
+    <table>
+
+        <thead>
+
+            <tr>
+
+                <th>Employee</th>
+
+                <th>Duty Role</th>
+
+                <th>Status</th>
+
+                <th>Joined</th>
+
+                <th>Non Joining Reason</th>
+
+            </tr>
+
+        </thead>
+
+        <tbody>
+
+            <tr *ngFor="let assignment of batch.employees">
+
+                <td>
+
+                    {{ assignment.employee.name }}
+
+                </td>
+
+                <td>
+
+                    {{ assignment.dutyRole }}
+
+                </td>
+
+                <td>
+
+                    {{ assignment.employee.status }}
+
+                </td>
+
+                <td>
+
+                    <input
+                        type="checkbox"
+                        [(ngModel)]="assignment.employee.joined"
+                        (change)="updateStatus(assignment.employee)">
+
+                </td>
+
+                <td>
+
+                    <select
+                        [(ngModel)]="assignment.employee.joinReason"
+                        (change)="updateStatus(assignment.employee)">
+
+                        <option value="">
+
+                            Select Reason
+
+                        </option>
+
+                        <option
+                            *ngFor="let reason of rejectionReasons"
+                            [value]="reason">
+
+                            {{ reason }}
+
+                        </option>
+
+                    </select>
+
+                    <input
+                        *ngIf="assignment.employee.joinReason === 'Other'"
+                        [(ngModel)]="assignment.employee.otherReason"
+                        placeholder="Enter reason">
+
+                </td>
+
+            </tr>
+
+        </tbody>
+
+    </table>
+
+</div>
+
+<div
+    class="card"
+    *ngIf="batchHistory.batches.length === 0">
+
+    No pending batches.
+
+</div>

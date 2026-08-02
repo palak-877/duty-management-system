@@ -11,7 +11,7 @@ import { Projects } from './features/masters/projects/projects';
 import { Designations } from './features/masters/designations/designations';
 import { authGuard } from './core/guards/auth-guard';
 import { BatchHistory } from './features/reports/batch-history/batch-history';
-
+import { JoiningStatus } from './features/transactions/joining-status/joining-status';
 export const routes: Routes = [
 
   {
@@ -83,6 +83,12 @@ export const routes: Routes = [
       {
   path: 'batch-history',
   component: BatchHistory,
+  canActivate: [authGuard]
+},
+
+{
+  path: 'joining-status',
+  component: JoiningStatus,
   canActivate: [authGuard]
 }
 
