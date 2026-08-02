@@ -98,24 +98,32 @@ filteredEmployees: any[] = [];
 
   ngOnInit(): void {
 
-    this.loggedInUser = this.auth.getLoggedInUser();
+  this.employees.forEach((emp: any) => {
 
-    if (!this.loggedInUser) {
+    emp.status = emp.isAssigned
+      ? 'Assigned'
+      : 'Available';
 
-      this.warningMessage = 'No user is logged in.';
-      return;
+  });
 
-    }
+  this.loggedInUser = this.auth.getLoggedInUser();
 
-    this.isAdmin = this.loggedInUser.role === 'Admin';
+  if (!this.loggedInUser) {
 
-    if (!this.isAdmin) {
-
-      this.loadLoggedInOfficer();
-
-    }
+    this.warningMessage = 'No user is logged in.';
+    return;
 
   }
+
+  this.isAdmin = this.loggedInUser.role === 'Admin';
+
+  if (!this.isAdmin) {
+
+    this.loadLoggedInOfficer();
+
+  }
+
+}
 
     // ==========================
   // Project Helper
@@ -903,16 +911,25 @@ Please contact the administrator.`;
 
   for (const emp of this.joiningEmployees[0].employees) {
 
+  if (emp.joined) {
 
-    if (!emp.joined && !emp.joinReason) {
-
-      alert(`Please mark "${emp.name}" as Joined or select a reason.`);
-
-      return;
-
-    }
+    emp.status = 'Assigned';
 
   }
+
+  else if (emp.joinReason) {
+
+    emp.status = 'Unassigned';
+
+  }
+
+  else {
+
+    emp.status = 'Pending';
+
+  }
+
+}
 
   this.batchHistory.batches.push({
 

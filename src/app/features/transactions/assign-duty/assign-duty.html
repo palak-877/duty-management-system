@@ -507,15 +507,16 @@
 
             <td>
 
-                <span
-                    class="status"
-                    [class.available]="!emp.isAssigned"
-                    [class.assigned]="emp.isAssigned">
+             <span
+    class="status"
+    [class.assigned]="emp.status === 'Assigned'"
+    [class.available]="emp.status === 'Available'"
+    [class.pending]="emp.status === 'Pending'"
+    [class.unassigned]="emp.status === 'Unassigned'">
 
-                    {{ emp.isAssigned ? 'Assigned' : 'Available' }}
+    {{ emp.status || (emp.isAssigned ? 'Assigned' : 'Available') }}
 
-                </span>
-
+</span>
             </td>
 
             <!-- Recommended -->
