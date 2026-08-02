@@ -95,28 +95,38 @@ filteredEmployees: any[] = [];
     private auth: Auth
   ) { }
 
-  ngOnInit(): void {
+ ngOnInit(): void {
 
+  this.employees.forEach((emp: any) => {
 
-    this.loggedInUser = this.auth.getLoggedInUser();
+    if (!emp.status) {
 
-    if (!this.loggedInUser) {
-
-      this.warningMessage = 'No user is logged in.';
-      return;
-
-    }
-
-    this.isAdmin = this.loggedInUser.role === 'Admin';
-
-    if (!this.isAdmin) {
-
-      this.loadLoggedInOfficer();
+      emp.status = emp.isAssigned
+        ? 'Assigned'
+        : 'Available';
 
     }
+
+  });
+
+  this.loggedInUser = this.auth.getLoggedInUser();
+
+  if (!this.loggedInUser) {
+
+    this.warningMessage = 'No user is logged in.';
+    return;
 
   }
 
+  this.isAdmin = this.loggedInUser.role === 'Admin';
+
+  if (!this.isAdmin) {
+
+    this.loadLoggedInOfficer();
+
+  }
+
+}
     // ==========================
   // Project Helper
   // ==========================
@@ -651,7 +661,7 @@ assignDuties(): void {
 
     date: new Date(),
 
-    employees: this.finalAssignments
+    employees: [...this.finalAssignments]
 
   });
 
