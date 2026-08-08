@@ -22,29 +22,43 @@ export class Login {
 
   login() {
 
-    if (
-      this.username.trim() === '' ||
-      this.password.trim() === ''
-    ) {
-      alert('Please enter username and password.');
-      return;
-    }
+  if (
+    this.username.trim() === '' ||
+    this.password.trim() === ''
+  ) {
 
-    const user = this.auth.login(
-      this.username,
-      this.password
-    );
+    alert('Please enter username and password.');
+    return;
 
-    if (user) {
+  }
+
+  this.auth.login(
+    this.username,
+    this.password
+  ).subscribe({
+
+    next: (user) => {
 
       this.router.navigate(['/dashboard']);
 
-    } else {
+    },
 
-      alert('Invalid username or password.');
+    error: (error) => {
+
+      if (error.status === 401) {
+
+        alert('Invalid username or password.');
+
+      } else {
+
+        alert('Unable to connect to server.');
+
+      }
 
     }
 
-  }
+  });
+
+}
 
 }

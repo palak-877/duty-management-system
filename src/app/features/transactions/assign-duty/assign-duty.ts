@@ -88,7 +88,9 @@ filteredEmployees: any[] = [];
   // Batch Management
   // ==========================
 
-  currentLot = 1;
+  get currentLot(): number {
+  return this.batchHistory.batches.length + 1;
+}
   generatedLots: any[] = [];
 
   constructor(
@@ -302,23 +304,8 @@ generateManualEmployees(): void {
       return;
     }
 
-    const rule = this.eligibilityRules.find(
-      (r: any) =>
-        r.projectId === Number(this.selectedProject) &&
-        r.dutyRole === staff.dutyRole
-    );
+    const allEmployees = this.employees.filter((emp: any) =>
 
-    if (!rule) {
-      return;
-    }
-
-    const eligibleEmployees = this.employees.filter((emp: any) =>
-
-      rule.eligibleDesignations.includes(emp.designation) &&
-      (
-  emp.status === 'Available' ||
-  emp.status === 'Unassigned'
-) &&
       !this.allocatedEmployeeIds.includes(emp.id) &&
 
       (!this.selectedDepartment ||
@@ -336,33 +323,6 @@ generateManualEmployees(): void {
 
     );
 
-    if (eligibleEmployees.length < Number(staff.count)) {
-
-      this.availabilityMessages.push(
-        `${staff.dutyRole}: Required ${staff.count}, Available ${eligibleEmployees.length}`
-      );
-
-    }
-
-    const allEmployees = this.employees.filter((emp: any) =>
-
-  !this.allocatedEmployeeIds.includes(emp.id) &&
-
-  (!this.selectedDepartment ||
-    emp.department === this.selectedDepartment) &&
-
-  (!this.selectedOffice ||
-    emp.office === this.selectedOffice) &&
-
-  (!this.selectedDesignation ||
-    emp.designation === this.selectedDesignation) &&
-
-  (!this.searchText ||
-    emp.name.toLowerCase().includes(this.searchText.toLowerCase()) ||
-    emp.employeeCode.toLowerCase().includes(this.searchText.toLowerCase()))
-
-);
-
     allEmployees.forEach((emp: any) => {
 
       emp.selected = false;
@@ -372,33 +332,21 @@ generateManualEmployees(): void {
 
     });
 
-    const employeeList = [...allEmployees];
-
     this.currentEmployees.push({
 
       dutyRole: staff.dutyRole,
 
       required: staff.count,
 
-      employees: employeeList,
+      employees: [...allEmployees],
 
-      filteredEmployees: [...employeeList]
+      filteredEmployees: [...allEmployees]
 
     });
 
   });
 
-  if (this.availabilityMessages.length > 0) {
-
-    this.warningMessage =
-      'Some requested employees are unavailable.\n\n' +
-      this.availabilityMessages.join('\n');
-
-  } else {
-
-    this.warningMessage = '';
-
-  }
+  this.warningMessage = '';
 
 }
     // ==========================
@@ -423,75 +371,105 @@ generateRecommendedEmployees(): void {
       return;
     }
 
-    const rule = this.eligibilityRules.find(
-      (r: any) =>
-        r.projectId === Number(this.selectedProject) &&
-        r.dutyRole === staff.dutyRole
-    );
-
-    if (!rule) {
-      return;
-    }
-
     const eligibleEmployees = this.employees.filter((emp: any) =>
 
-  rule.eligibleDesignations.includes(emp.designation) &&
-  emp.constituency === this.selectedOfficer.constituency &&
+      emp.constituency === this.selectedOfficer.constituency &&
 
-  (
-    emp.status === 'Available' ||
-    emp.status === 'Unassigned'
-  ) &&
+      (
+        emp.status === 'Available' ||
+        emp.status === 'Unassigned'
+      ) &&
 
-  !this.allocatedEmployeeIds.includes(emp.id) &&
+      !this.allocatedEmployeeIds.includes(emp.id) &&
 
-  (!this.selectedDepartment ||
-    emp.department === this.selectedDepartment) &&
+      (!this.selectedDepartment ||
+        emp.department === this.selectedDepartment) &&
 
-  (!this.selectedOffice ||
-    emp.office === this.selectedOffice) &&
+      (!this.selectedOffice ||
+        emp.office === this.selectedOffice) &&
 
-  (!this.selectedDesignation ||
-    emp.designation === this.selectedDesignation) &&
+      (!this.selectedDesignation ||
+        emp.designation === this.selectedDesignation) &&
 
-  (!this.searchText ||
-    emp.name.toLowerCase().includes(this.searchText.toLowerCase()) ||
-    emp.employeeCode.toLowerCase().includes(this.searchText.toLowerCase()))
+      (!this.searchText ||
+        emp.name.toLowerCase().includes(this.searchText.toLowerCase()) ||
+        emp.employeeCode.toLowerCase().includes(this.searchText.toLowerCase()))
 
-);
-    const shuffledEmployees = this.shuffleEmployees(eligibleEmployees);
-
-    const recommendedEmployees = shuffledEmployees.slice(
-      0,
-      Number(staff.count)
     );
 
-    if (recommendedEmployees.length < Number(staff.count)) {
+    const officeGroups = new Map<string, any[]>();
 
-      this.availabilityMessages.push(
-        `${staff.dutyRole}: Required ${staff.count}, Available ${recommendedEmployees.length}`
-      );
+eligibleEmployees.forEach((emp: any) => {
 
-    }
+  if (!officeGroups.has(emp.office)) {
+
+    officeGroups.set(emp.office, []);
+
+  }
+
+  officeGroups.get(emp.office)!.push(emp);
+
+});
+
+const recommendedEmployees: any[] = [];
+
+officeGroups.forEach((employees) => {
+
+  const shuffled = this.shuffleEmployees(employees);
+
+  if (
+    shuffled.length > 0 &&
+    recommendedEmployees.length < Number(staff.count)
+  ) {
+
+    recommendedEmployees.push(shuffled[0]);
+
+  }
+
+});
+
+const remainingEligibleEmployees = eligibleEmployees.filter(
+  (emp: any) => !recommendedEmployees.includes(emp)
+);
+
+
+const shuffledRemaining = this.shuffleEmployees(remainingEligibleEmployees);
+
+while (
+  recommendedEmployees.length < Number(staff.count) &&
+  shuffledRemaining.length > 0
+) {
+
+  recommendedEmployees.push(shuffledRemaining.shift());
+
+}
+
+if (recommendedEmployees.length < Number(staff.count)) {
+
+  this.availabilityMessages.push(
+    `${staff.dutyRole}: Required ${staff.count}, Available ${recommendedEmployees.length}`
+  );
+
+}
 
     const allEmployees = this.employees.filter((emp: any) =>
 
-  !this.allocatedEmployeeIds.includes(emp.id) &&
+      !this.allocatedEmployeeIds.includes(emp.id) &&
 
-  (!this.selectedDepartment ||
-    emp.department === this.selectedDepartment) &&
+      (!this.selectedDepartment ||
+        emp.department === this.selectedDepartment) &&
 
-  (!this.selectedOffice ||
-    emp.office === this.selectedOffice) &&
+      (!this.selectedOffice ||
+        emp.office === this.selectedOffice) &&
 
-  (!this.selectedDesignation ||
-    emp.designation === this.selectedDesignation) &&
+      (!this.selectedDesignation ||
+        emp.designation === this.selectedDesignation) &&
 
-  (!this.searchText ||
-    emp.name.toLowerCase().includes(this.searchText.toLowerCase()) ||
-    emp.employeeCode.toLowerCase().includes(this.searchText.toLowerCase()))
+      (!this.searchText ||
+        emp.name.toLowerCase().includes(this.searchText.toLowerCase()) ||
+        emp.employeeCode.toLowerCase().includes(this.searchText.toLowerCase()))
 
-);
+    );
 
     allEmployees.forEach((emp: any) => {
 
@@ -512,20 +490,21 @@ generateRecommendedEmployees(): void {
       (emp: any) => !recommendedEmployees.includes(emp)
     );
 
-    const employeeList = [
-      ...recommendedEmployees,
-      ...remainingEmployees
-    ];
-
     this.currentEmployees.push({
 
       dutyRole: staff.dutyRole,
 
       required: staff.count,
 
-      employees: employeeList,
+      employees: [
+        ...recommendedEmployees,
+        ...remainingEmployees
+      ],
 
-      filteredEmployees: [...employeeList]
+      filteredEmployees: [
+        ...recommendedEmployees,
+        ...remainingEmployees
+      ]
 
     });
 
@@ -665,7 +644,6 @@ assignDuties(): void {
 
   });
 
-  this.currentLot++;
 
   alert(
     `${this.finalAssignments.length} employee(s) assigned successfully.`

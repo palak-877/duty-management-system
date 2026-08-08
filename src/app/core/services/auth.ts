@@ -1,35 +1,36 @@
 import { Injectable } from '@angular/core';
-import { authData } from './auth-data';
+import { HttpClient } from '@angular/common/http';
+import { Observable, tap } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class Auth {
 
-  login(username: string, password: string) {
+  private apiUrl = 'http://localhost:5000/api/auth';
 
-    const user = authData.users.find(
+  constructor(private http: HttpClient) {}
 
-      u =>
+  login(username: string, password: string): Observable<any> {
 
-        u.username.toLowerCase() === username.trim().toLowerCase() &&
+    return this.http.post<any>(
+      `${this.apiUrl}/login`,
+      {
+        username,
+        password
+      }
+    ).pipe(
 
-        u.password === password.trim()
+      tap(user => {
+
+        localStorage.setItem(
+          'loggedInUser',
+          JSON.stringify(user)
+        );
+
+      })
 
     );
-
-    if (user) {
-
-      localStorage.setItem(
-        'loggedInUser',
-        JSON.stringify(user)
-      );
-
-      return user;
-
-    }
-
-    return null;
 
   }
 
