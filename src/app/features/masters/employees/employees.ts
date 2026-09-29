@@ -1,74 +1,162 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { employeeData } from '../../../core/services/employee-data';
+
+import {
+  EmployeeService,
+  Employee
+} from '../../../core/services/employee.service';
 
 @Component({
   selector: 'app-employees',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [
+    CommonModule,
+    FormsModule
+  ],
   templateUrl: './employees.html',
   styleUrl: './employees.css'
 })
-export class Employees {
+export class Employees implements OnInit {
 
-  employees = employeeData.employees;
+  employees: Employee[] = [];
+
   searchText = '';
 
-// showModal = false;
+  currentPage = 1;
+  pageSize = 20;
 
-// isEditMode = false;
+  totalEmployees = 0;
+  totalPages = 0;
 
-// editingEmployeeId = 0;
+  loading = false;
+  errorMessage = '';
 
-// name = '';
+  constructor(
+    private employeeService: EmployeeService,
+    private cdr: ChangeDetectorRef
+  ) {}
 
-// department = 'Education';
+  ngOnInit(): void {
+    this.loadEmployees();
+  }
 
-// phone = '';
+  loadEmployees(): void {
 
-// email = '';
+    this.loading = true;
+    this.errorMessage = '';
 
-// openModal() {
-//   this.showModal = true;
-// }
+    this.employeeService
+      .getEmployees(
+        this.currentPage,
+        this.pageSize,
+        this.searchText
+      )
+      .subscribe({
+        next: (response) => {
 
-// closeModal() {
+          this.employees = response.data.map((employee: any) => ({
+            employeeCode: employee.id ?? '—',
+            name: employee.Name ?? '—',
+            department: employee.deptcode ?? '—',
+            designation:
+              employee.DesigCode !== undefined
+                ? String(employee.DesigCode)
+                : '—',
+            constituency:
+              employee.cons !== undefined
+                ? String(employee.cons)
+                : '—',
+            phone: employee.mobileno ?? '—',
+            email: '—',
+            status: 'Unassigned'
+          }));
 
-//   this.showModal = false;
+          this.totalEmployees =
+            response.pagination.total;
 
-//   this.name = '';
-//   this.department = 'Education';
-//   this.phone = '';
-//   this.email = '';
+          this.totalPages =
+            response.pagination.totalPages;
 
-//   this.isEditMode = false;
-//   this.editingEmployeeId = 0;
+          this.loading = false;
 
-// }
+          // Make sure the table updates immediately
+          this.cdr.detectChanges();
+        },
 
-filteredEmployees() {
+        error: (error) => {
 
-  const search = this.searchText.trim().toLowerCase();
+          console.error(
+            'Failed to load employees:',
+            error
+          );
 
-  return this.employees.filter(employee =>
+          this.errorMessage =
+            'Unable to load employees from server.';
 
-    employee.employeeCode.toLowerCase().includes(search) ||
+          this.loading = false;
 
-    employee.name.toLowerCase().includes(search) ||
+          this.cdr.detectChanges();
+        }
+      });
+  }
 
-    employee.department.toLowerCase().includes(search) ||
+  searchEmployees(): void {
+    this.currentPage = 1;
+    this.loadEmployees();
+  }
 
-    employee.designation.toLowerCase().includes(search) ||
+  previousPage(): void {
 
-    employee.constituency.toLowerCase().includes(search) ||
+    if (this.currentPage > 1) {
+      this.currentPage--;
+      this.loadEmployees();
+    }
+  }
 
-    employee.phone.includes(search) ||
+  nextPage(): void {
 
-    employee.email.toLowerCase().includes(search)
+    if (this.currentPage < this.totalPages) {
+      this.currentPage++;
+      this.loadEmployees();
+    }
+  }
 
-  );
+  getStartRecord(): number {
 
-}
+    if (this.totalEmployees === 0) {
+      return 0;
+    }
 
+    return (
+      (this.currentPage - 1) *
+      this.pageSize
+    ) + 1;
+  }
+
+  getEndRecord(): number {
+
+    return Math.min(
+      this.currentPage * this.pageSize,
+      this.totalEmployees
+    );
+  }
+
+  get availableCount(): number {
+
+    return this.employees.filter(
+      employee =>
+        employee.status === 'Available' ||
+        employee.status === 'Unassigned'
+    ).length;
+  }
+
+  get assignedCount(): number {
+
+    return this.employees.filter(
+      employee =>
+        employee.status === 'Assigned' ||
+        employee.status === 'Pending'
+    ).length;
+  }
 }

@@ -1,14 +1,17 @@
-<div class="employees">
+<div class="employees-page">
 
-    <!-- ================= Header ================= -->
-
+    <!-- =========================
+         Page Header
+    ========================== -->
     <div class="page-header">
 
-        <div>
+        <div class="page-title-section">
 
-            <h2>Employees Management</h2>
+            <h1>
+                👥 Employees Management
+            </h1>
 
-            <p class="page-subtitle">
+            <p>
                 View and monitor employees available for duty assignment.
             </p>
 
@@ -16,139 +19,360 @@
 
     </div>
 
-    <!-- ================= Statistics ================= -->
 
+    <!-- =========================
+         Statistics
+    ========================== -->
     <div class="stats-grid">
 
+        <!-- Total -->
         <div class="stat-card">
 
-            <span>Total Employees</span>
+            <div class="stat-icon total">
+                👥
+            </div>
 
-            <h2>{{ filteredEmployees().length }}</h2>
+            <div class="stat-info">
+
+                <span class="stat-label">
+                    Total Employees
+                </span>
+
+                <span class="stat-value">
+                    {{ totalEmployees }}
+                </span>
+
+            </div>
 
         </div>
 
-        <div class="stat-card available">
 
-            <span>Available</span>
+        <!-- Available -->
+        <div class="stat-card">
 
-            <h2>
+            <div class="stat-icon available">
+                ✓
+            </div>
 
-                {{ filteredEmployees().filter(e => e.status === 'Available' || e.status === 'Unassigned').length }}
+            <div class="stat-info">
 
-            </h2>
+                <span class="stat-label">
+                    Available
+                </span>
+
+                <span class="stat-value">
+                    {{ availableCount }}
+                </span>
+
+            </div>
 
         </div>
 
-        <div class="stat-card assigned">
 
-            <span>Assigned</span>
+        <!-- Assigned -->
+        <div class="stat-card">
 
-            <h2>
+            <div class="stat-icon assigned">
+                📋
+            </div>
 
-                {{ filteredEmployees().filter(e => e.status === 'Assigned' || e.status === 'Pending').length }}
+            <div class="stat-info">
 
-            </h2>
+                <span class="stat-label">
+                    Assigned
+                </span>
+
+                <span class="stat-value">
+                    {{ assignedCount }}
+                </span>
+
+            </div>
 
         </div>
 
     </div>
 
-    <!-- ================= Search ================= -->
 
-    <div class="search-card">
+    <!-- =========================
+         Search
+    ========================== -->
+    <div class="search-section">
 
-        <input
-            type="text"
-            class="search-input"
-            placeholder="🔍 Search by Employee Code, Name, Department, Designation or Constituency..."
-            [(ngModel)]="searchText">
+        <div class="search-container">
+
+            <div class="search-input-wrapper">
+
+                <span class="search-icon">
+                    🔍
+                </span>
+
+                <input
+                    type="text"
+                    [(ngModel)]="searchText"
+                    (keyup.enter)="searchEmployees()"
+                    placeholder="Search by Employee ID, Name, Father's Name or Phone..."
+                />
+
+            </div>
+
+
+            <button
+                type="button"
+                class="search-button"
+                (click)="searchEmployees()"
+            >
+                🔍 Search
+            </button>
+
+        </div>
 
     </div>
 
-    <!-- ================= Table ================= -->
 
-    <div class="table-card">
+    <!-- =========================
+         Error
+    ========================== -->
+    <div
+        *ngIf="errorMessage"
+        class="error-message"
+    >
+        {{ errorMessage }}
+    </div>
 
-        <table>
 
-            <thead>
+    <!-- =========================
+         Employee Table
+    ========================== -->
+    <div
+        class="table-card"
+        *ngIf="!errorMessage"
+    >
 
-                <tr>
+        <!-- Loading -->
+        <div
+            *ngIf="loading"
+            class="loading-state"
+        >
 
-                    <th>Employee Code</th>
-                    <th>Name</th>
-                    <th>Department</th>
-                    <th>Designation</th>
-                    <th>Constituency</th>
-                    <th>Phone</th>
-                    <th>Email</th>
-                    <th>Status</th>
+            <div class="loading-spinner"></div>
 
-                </tr>
+            Loading employees...
 
-            </thead>
+        </div>
 
-            <tbody>
 
-                <tr *ngFor="let employee of filteredEmployees()">
+        <!-- Table -->
+        <div
+            class="table-wrapper"
+            *ngIf="!loading"
+        >
 
-                    <td>
+            <table class="employee-table">
 
-                        <span class="employee-code">
+                <thead>
 
-                            {{ employee.employeeCode }}
+                    <tr>
 
-                        </span>
+                        <th>
+                            Employee ID
+                        </th>
 
-                    </td>
+                        <th>
+                            Name
+                        </th>
 
-                    <td>
+                        <th>
+                            Department Code
+                        </th>
 
-                        <strong>{{ employee.name }}</strong>
+                        <th>
+                            Designation Code
+                        </th>
 
-                    </td>
+                        <th>
+                            Constituency
+                        </th>
 
-                    <td>{{ employee.department }}</td>
+                        <th>
+                            Phone
+                        </th>
 
-                    <td>{{ employee.designation }}</td>
+                        <th>
+                            Email
+                        </th>
 
-                    <td>{{ employee.constituency }}</td>
+                        <th>
+                            Status
+                        </th>
 
-                    <td>{{ employee.phone }}</td>
+                    </tr>
 
-                    <td>{{ employee.email }}</td>
+                </thead>
 
-                    <td>
 
-                        <span
+                <tbody>
+
+                    <!-- Employee rows -->
+                    <tr
+                        *ngFor="let employee of employees"
+                    >
+
+                        <td>
+
+                            <span class="employee-id">
+                                {{ employee.employeeCode }}
+                            </span>
+
+                        </td>
+
+
+                        <td>
+
+                            <span class="employee-name">
+                                {{ employee.name }}
+                            </span>
+
+                        </td>
+
+
+                        <td>
+                            {{ employee.department }}
+                        </td>
+
+
+                        <td>
+                            {{ employee.designation }}
+                        </td>
+
+
+                        <td>
+                            {{ employee.constituency }}
+                        </td>
+
+
+                        <td>
+                            {{ employee.phone }}
+                        </td>
+
+
+                        <td>
+                            {{ employee.email }}
+                        </td>
+
+
+                        <td>
+
+                      <span
     class="status-badge"
-    [class.available-badge]="employee.status === 'Available' || employee.status === 'Unassigned'"
-    [class.assigned-badge]="employee.status === 'Assigned' || employee.status === 'Pending'">
+    [ngClass]="{
+        'status-unassigned':
+            employee.status === 'Unassigned' ||
+            employee.status === 'Available',
 
+        'status-assigned':
+            employee.status === 'Assigned',
+
+        'status-pending':
+            employee.status === 'Pending'
+    }"
+>
     {{ employee.status }}
-
 </span>
 
-                    </td>
+                        </td>
 
-                </tr>
+                    </tr>
 
-                <tr *ngIf="filteredEmployees().length === 0">
 
-                    <td
-                        colspan="8"
-                        class="empty-row">
+                    <!-- No results -->
+                    <tr
+                        *ngIf="employees.length === 0"
+                    >
 
-                        No employees found.
+                        <td
+                            colspan="8"
+                            class="empty-state"
+                        >
 
-                    </td>
+                            <h3>
+                                No employees found
+                            </h3>
 
-                </tr>
+                            <p>
+                                Try another search or clear the search field.
+                            </p>
 
-            </tbody>
+                        </td>
 
-        </table>
+                    </tr>
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+
+        <!-- =========================
+             Pagination
+        ========================== -->
+        <div
+            class="pagination-section"
+            *ngIf="!loading && totalEmployees > 0"
+        >
+
+            <div class="pagination-info">
+
+                Showing
+                <strong>
+                    {{ getStartRecord() }}
+                </strong>
+                -
+                <strong>
+                    {{ getEndRecord() }}
+                </strong>
+                of
+                <strong>
+                    {{ totalEmployees }}
+                </strong>
+
+            </div>
+
+
+            <div class="pagination-controls">
+
+                <button
+                    type="button"
+                    class="pagination-button"
+                    (click)="previousPage()"
+                    [disabled]="currentPage === 1"
+                >
+                    ← Previous
+                </button>
+
+
+                <span class="page-number">
+                    {{ currentPage }}
+                </span>
+
+
+                <span class="pagination-info">
+                    of {{ totalPages }}
+                </span>
+
+
+                <button
+                    type="button"
+                    class="pagination-button"
+                    (click)="nextPage()"
+                    [disabled]="currentPage === totalPages"
+                >
+                    Next →
+                </button>
+
+            </div>
+
+        </div>
 
     </div>
 
