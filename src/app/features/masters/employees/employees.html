@@ -1,110 +1,49 @@
+
 <div class="employees-page">
 
-    <!-- =========================
-         Page Header
-    ========================== -->
+    <!-- Page Header -->
     <div class="page-header">
-
         <div class="page-title-section">
-
-            <h1>
-                👥 Employees Management
-            </h1>
-
-            <p>
-                View and monitor employees available for duty assignment.
-            </p>
-
+            <h1>👥 Employees Management</h1>
+            <p>View employee records imported from the Excel database.</p>
         </div>
-
     </div>
 
-
-    <!-- =========================
-         Statistics
-    ========================== -->
+    <!-- Statistics -->
     <div class="stats-grid">
 
-        <!-- Total -->
         <div class="stat-card">
-
-            <div class="stat-icon total">
-                👥
-            </div>
-
+            <div class="stat-icon total">👥</div>
             <div class="stat-info">
-
-                <span class="stat-label">
-                    Total Employees
-                </span>
-
-                <span class="stat-value">
-                    {{ totalEmployees }}
-                </span>
-
+                <span class="stat-label">Total Employees</span>
+                <span class="stat-value">{{ totalEmployees }}</span>
             </div>
-
         </div>
 
-
-        <!-- Available -->
         <div class="stat-card">
-
-            <div class="stat-icon available">
-                ✓
-            </div>
-
+            <div class="stat-icon available">📄</div>
             <div class="stat-info">
-
-                <span class="stat-label">
-                    Available
-                </span>
-
-                <span class="stat-value">
-                    {{ availableCount }}
-                </span>
-
+                <span class="stat-label">Records on Page</span>
+                <span class="stat-value">{{ employees.length }}</span>
             </div>
-
         </div>
 
-
-        <!-- Assigned -->
         <div class="stat-card">
-
-            <div class="stat-icon assigned">
-                📋
-            </div>
-
+            <div class="stat-icon assigned">📋</div>
             <div class="stat-info">
-
-                <span class="stat-label">
-                    Assigned
-                </span>
-
-                <span class="stat-value">
-                    {{ assignedCount }}
-                </span>
-
+                <span class="stat-label">Current Page</span>
+                <span class="stat-value">{{ currentPage }} / {{ totalPages }}</span>
             </div>
-
         </div>
 
     </div>
 
-
-    <!-- =========================
-         Search
-    ========================== -->
+    <!-- Search -->
     <div class="search-section">
-
         <div class="search-container">
 
             <div class="search-input-wrapper">
-
-                <span class="search-icon">
-                    🔍
-                </span>
+                <span class="search-icon">🔍</span>
 
                 <input
                     type="text"
@@ -112,9 +51,7 @@
                     (keyup.enter)="searchEmployees()"
                     placeholder="Search by Employee ID, Name, Father's Name or Phone..."
                 />
-
             </div>
-
 
             <button
                 type="button"
@@ -125,185 +62,137 @@
             </button>
 
         </div>
-
     </div>
 
-
-    <!-- =========================
-         Error
-    ========================== -->
-    <div
-        *ngIf="errorMessage"
-        class="error-message"
-    >
+    <!-- Error -->
+    <div *ngIf="errorMessage" class="error-message">
         {{ errorMessage }}
     </div>
 
-
-    <!-- =========================
-         Employee Table
-    ========================== -->
-    <div
-        class="table-card"
-        *ngIf="!errorMessage"
-    >
+    <!-- Employee Table -->
+    <div class="table-card" *ngIf="!errorMessage">
 
         <!-- Loading -->
-        <div
-            *ngIf="loading"
-            class="loading-state"
-        >
-
+        <div *ngIf="loading" class="loading-state">
             <div class="loading-spinner"></div>
-
             Loading employees...
-
         </div>
 
-
         <!-- Table -->
-        <div
-            class="table-wrapper"
-            *ngIf="!loading"
-        >
+        <div class="table-wrapper" *ngIf="!loading">
 
             <table class="employee-table">
 
                 <thead>
-
                     <tr>
-
-                        <th>
-                            Employee ID
-                        </th>
-
-                        <th>
-                            Name
-                        </th>
-
-                        <th>
-                            Department Code
-                        </th>
-
-                        <th>
-                            Designation Code
-                        </th>
-
-                        <th>
-                            Constituency
-                        </th>
-
-                        <th>
-                            Phone
-                        </th>
-
-                        <th>
-                            Email
-                        </th>
-
-                        <th>
-                            Status
-                        </th>
-
+                        <th>distcode</th>
+                        <th>rno</th>
+                        <th>class</th>
+                        <th>Name</th>
+                        <th>FName</th>
+                        <th>rAddress</th>
+                        <th>HomeCons</th>
+                        <th>cons</th>
+                        <th>PayScaleCode</th>
+                        <th>basicPay</th>
+                        <th>office</th>
+                        <th>category</th>
+                        <th>DesigCode</th>
+                        <th>excercisedElectionDuty</th>
+                        <th>longLeave</th>
+                        <th>handicap</th>
+                        <th>DOR</th>
+                        <th>BLO</th>
+                        <th>id</th>
+                        <th>sex</th>
+                        <th>del</th>
+                        <th>dt</th>
+                        <th>deptcode</th>
+                        <th>officecode</th>
+                        <th>PartyNo</th>
+                        <th>cons_alot</th>
+                        <th>StateCentre</th>
+                        <th>sendreceivedist</th>
+                        <th>oldrno</th>
+                        <th>newpartyno</th>
+                        <th>selected</th>
+                        <th>nativecon</th>
+                        <th>letterno</th>
+                        <th>centrecode</th>
+                        <th>mobileno</th>
+                        <th>dob</th>
+                        <th>retiredt</th>
+                        <th>deptslno</th>
+                        <th>exportdata</th>
+                        <th>lotno</th>
+                        <th>RegdVoterCons</th>
+                        <th>rocode</th>
                     </tr>
-
                 </thead>
-
 
                 <tbody>
 
-                    <!-- Employee rows -->
-                    <tr
-                        *ngFor="let employee of employees"
-                    >
+                    <tr *ngFor="let employee of employees">
+
+                        <td>{{ employee.distcode ?? '—' }}</td>
+                        <td>{{ employee.rno ?? '—' }}</td>
+                        <td>{{ employee.class ?? '—' }}</td>
 
                         <td>
-
-                            <span class="employee-id">
-                                {{ employee.employeeCode }}
-                            </span>
-
-                        </td>
-
-
-                        <td>
-
                             <span class="employee-name">
-                                {{ employee.name }}
+                                {{ employee.Name }}
                             </span>
-
                         </td>
 
-
+                        <td>{{ employee.FName ?? '—' }}</td>
+                        <td>{{ employee.rAddress ?? '—' }}</td>
+                        <td>{{ employee.HomeCons ?? '—' }}</td>
+                        <td>{{ employee.cons ?? '—' }}</td>
+                        <td>{{ employee.PayScaleCode ?? '—' }}</td>
+                        <td>{{ employee.basicPay ?? '—' }}</td>
+                        <td>{{ employee.office ?? '—' }}</td>
+                        <td>{{ employee.category ?? '—' }}</td>
+                        <td>{{ employee.DesigCode ?? '—' }}</td>
+                        <td>{{ employee.excercisedElectionDuty ?? '—' }}</td>
+                        <td>{{ employee.longLeave ?? '—' }}</td>
+                        <td>{{ employee.handicap ?? '—' }}</td>
+                        <td>{{ employee.DOR ?? '—' }}</td>
+                        <td>{{ employee.BLO ?? '—' }}</td>
                         <td>
-                            {{ employee.department }}
+                            <span class="employee-id">{{ employee.id }}</span>
                         </td>
-
-
-                        <td>
-                            {{ employee.designation }}
-                        </td>
-
-
-                        <td>
-                            {{ employee.constituency }}
-                        </td>
-
-
-                        <td>
-                            {{ employee.phone }}
-                        </td>
-
-
-                        <td>
-                            {{ employee.email }}
-                        </td>
-
-
-                        <td>
-
-                      <span
-    class="status-badge"
-    [ngClass]="{
-        'status-unassigned':
-            employee.status === 'Unassigned' ||
-            employee.status === 'Available',
-
-        'status-assigned':
-            employee.status === 'Assigned',
-
-        'status-pending':
-            employee.status === 'Pending'
-    }"
->
-    {{ employee.status }}
-</span>
-
-                        </td>
+                        <td>{{ employee.sex ?? '—' }}</td>
+                        <td>{{ employee.del ?? '—' }}</td>
+                        <td>{{ employee.dt ?? '—' }}</td>
+                        <td>{{ employee.deptcode ?? '—' }}</td>
+                        <td>{{ employee.officecode ?? '—' }}</td>
+                        <td>{{ employee.PartyNo ?? '—' }}</td>
+                        <td>{{ employee.cons_alot ?? '—' }}</td>
+                        <td>{{ employee.StateCentre ?? '—' }}</td>
+                        <td>{{ employee.sendreceivedist ?? '—' }}</td>
+                        <td>{{ employee.oldrno ?? '—' }}</td>
+                        <td>{{ employee.newpartyno ?? '—' }}</td>
+                        <td>{{ employee.selected ?? '—' }}</td>
+                        <td>{{ employee.nativecon ?? '—' }}</td>
+                        <td>{{ employee.letterno ?? '—' }}</td>
+                        <td>{{ employee.centrecode ?? '—' }}</td>
+                        <td>{{ employee.mobileno ?? '—' }}</td>
+                        <td>{{ employee.dob ?? '—' }}</td>
+                        <td>{{ employee.retiredt ?? '—' }}</td>
+                        <td>{{ employee.deptslno ?? '—' }}</td>
+                        <td>{{ employee.exportdata ?? '—' }}</td>
+                        <td>{{ employee.lotno ?? '—' }}</td>
+                        <td>{{ employee.RegdVoterCons ?? '—' }}</td>
+                        <td>{{ employee.rocode ?? '—' }}</td>
 
                     </tr>
 
-
-                    <!-- No results -->
-                    <tr
-                        *ngIf="employees.length === 0"
-                    >
-
-                        <td
-                            colspan="8"
-                            class="empty-state"
-                        >
-
-                            <h3>
-                                No employees found
-                            </h3>
-
-                            <p>
-                                Try another search or clear the search field.
-                            </p>
-
+                    <!-- No Results -->
+                    <tr *ngIf="employees.length === 0">
+                        <td colspan="42" class="empty-state">
+                            <h3>No employees found</h3>
+                            <p>Try another search or clear the search field.</p>
                         </td>
-
                     </tr>
 
                 </tbody>
@@ -312,32 +201,20 @@
 
         </div>
 
-
-        <!-- =========================
-             Pagination
-        ========================== -->
+        <!-- Pagination -->
         <div
             class="pagination-section"
             *ngIf="!loading && totalEmployees > 0"
         >
 
             <div class="pagination-info">
-
                 Showing
-                <strong>
-                    {{ getStartRecord() }}
-                </strong>
+                <strong>{{ getStartRecord() }}</strong>
                 -
-                <strong>
-                    {{ getEndRecord() }}
-                </strong>
+                <strong>{{ getEndRecord() }}</strong>
                 of
-                <strong>
-                    {{ totalEmployees }}
-                </strong>
-
+                <strong>{{ totalEmployees }}</strong>
             </div>
-
 
             <div class="pagination-controls">
 
@@ -350,16 +227,11 @@
                     ← Previous
                 </button>
 
-
-                <span class="page-number">
-                    {{ currentPage }}
-                </span>
-
+                <span class="page-number">{{ currentPage }}</span>
 
                 <span class="pagination-info">
                     of {{ totalPages }}
                 </span>
-
 
                 <button
                     type="button"

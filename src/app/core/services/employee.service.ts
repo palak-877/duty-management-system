@@ -3,14 +3,72 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 export interface Employee {
-  employeeCode: string;
-  name: string;
-  department: string;
-  designation: string;
-  constituency: string;
-  phone: string;
-  email: string;
-  status: string;
+  _id?: string;
+
+  distcode?: number;
+  rno?: number;
+  class?: number;
+
+  Name: string;
+  FName?: string;
+  rAddress?: string;
+
+  HomeCons?: number;
+  cons?: number;
+
+  PayScaleCode?: number;
+  basicPay?: number;
+
+  office?: string;
+  category?: string;
+
+  DesigCode?: number;
+  excercisedElectionDuty?: string;
+
+  longLeave?: string;
+  handicap?: string;
+  DOR?: string;
+  BLO?: string;
+
+  id: string;
+  sex?: string;
+  del?: string;
+
+  dt?: number;
+
+  deptcode?: string;
+  officecode?: string;
+
+  PartyNo?: number;
+  cons_alot?: number;
+  StateCentre?: string;
+  sendreceivedist?: number;
+
+  oldrno?: number;
+  newpartyno?: number;
+
+  selected?: string;
+  nativecon?: number;
+
+  letterno?: number;
+  centrecode?: number;
+
+  mobileno?: string;
+
+  dob?: number;
+  retiredt?: number;
+
+  deptslno?: number;
+
+  exportdata?: string;
+  lotno?: number;
+
+  RegdVoterCons?: number;
+  rocode?: number;
+
+  __v?: number;
+  createdAt?: string;
+  updatedAt?: string;
 }
 
 export interface EmployeeApiResponse {

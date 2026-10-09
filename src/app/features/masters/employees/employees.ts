@@ -55,22 +55,7 @@ export class Employees implements OnInit {
       .subscribe({
         next: (response) => {
 
-          this.employees = response.data.map((employee: any) => ({
-            employeeCode: employee.id ?? '—',
-            name: employee.Name ?? '—',
-            department: employee.deptcode ?? '—',
-            designation:
-              employee.DesigCode !== undefined
-                ? String(employee.DesigCode)
-                : '—',
-            constituency:
-              employee.cons !== undefined
-                ? String(employee.cons)
-                : '—',
-            phone: employee.mobileno ?? '—',
-            email: '—',
-            status: 'Unassigned'
-          }));
+          this.employees = response.data;
 
           this.totalEmployees =
             response.pagination.total;
@@ -143,20 +128,10 @@ export class Employees implements OnInit {
   }
 
   get availableCount(): number {
+  return 0;
+}
 
-    return this.employees.filter(
-      employee =>
-        employee.status === 'Available' ||
-        employee.status === 'Unassigned'
-    ).length;
-  }
-
-  get assignedCount(): number {
-
-    return this.employees.filter(
-      employee =>
-        employee.status === 'Assigned' ||
-        employee.status === 'Pending'
-    ).length;
-  }
+get assignedCount(): number {
+  return 0;
+}
 }

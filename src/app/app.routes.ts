@@ -1,3 +1,4 @@
+
 import { Routes } from '@angular/router';
 
 import { Login } from './features/auth/login/login';
@@ -12,8 +13,8 @@ import { Designations } from './features/masters/designations/designations';
 import { authGuard } from './core/guards/auth-guard';
 import { BatchHistory } from './features/reports/batch-history/batch-history';
 import { JoiningStatus } from './features/transactions/joining-status/joining-status';
-export const routes: Routes = [
 
+export const routes: Routes = [
   {
     path: '',
     redirectTo: 'login',
@@ -49,7 +50,6 @@ export const routes: Routes = [
     path: '',
     component: MainLayout,
     children: [
-
       {
         path: 'dashboard',
         component: Dashboard,
@@ -81,17 +81,16 @@ export const routes: Routes = [
       },
 
       {
-  path: 'batch-history',
-  component: BatchHistory,
-  canActivate: [authGuard]
-},
+        path: 'batch-history',
+        component: BatchHistory,
+        canActivate: [authGuard]
+      },
 
-{
-  path: 'joining-status',
-  component: JoiningStatus,
-  canActivate: [authGuard]
-}
-
+      {
+        path: 'joining-status',
+        component: JoiningStatus,
+        canActivate: [authGuard]
+      }
     ]
   },
 
@@ -99,5 +98,4 @@ export const routes: Routes = [
     path: '**',
     redirectTo: 'login'
   }
-
 ];
